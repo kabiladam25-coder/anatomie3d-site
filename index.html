@@ -2,794 +2,639 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Human3D Clinic | Anatomie & Pathologie 3D</title>
+  <title>Human3D Clinic – Sciences fondamentales en médecine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta
-    name="description"
-    content="Visualisation 3D simple de l'anatomie humaine et de quelques pathologies. Rotate, zoom et découvrez le corps humain en 3D."
-  />
-
-  <!-- Logo / Favicon (à remplacer plus tard par votre propre image) -->
-  <link rel="icon" href="favicon.png" />
-
-  <!-- Import de la police Google -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Composant <model-viewer> Google pour afficher du 3D facilement -->
-  <script
-    type="module"
-    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
-  ></script>
-
   <style>
-    /* ---------- RESET SIMPLE ---------- */
+    :root {
+      --bg: #050816;
+      --bg-secondary: #0b1020;
+      --accent: #22d3ee;
+      --accent-soft: rgba(34, 211, 238, 0.12);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --card: #0f172a;
+      --border: #1f2937;
+      --radius-xl: 20px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
-      font-family: "Poppins", Arial, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #020617);
-      color: #e5e7eb;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* ---------- HEADER ---------- */
     header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(18px);
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: rgba(15, 23, 42, 0.95);
-      border-bottom: 1px solid #1f2937;
-      backdrop-filter: blur(10px);
+      z-index: 50;
     }
 
-    .container {
-      width: 100%;
+    .nav {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-
-    .header-inner {
+      padding: 0.8rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 0;
+      gap: 1rem;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .logo-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #22d3ee, #0ea5e9, #1d4ed8);
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9, #22c55e);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1.1rem;
       color: #0b1120;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
     }
 
     .logo-text-main {
       font-weight: 700;
-      letter-spacing: 0.03em;
-      color: #e5e7eb;
-      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      font-size: 0.95rem;
     }
 
     .logo-text-sub {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      line-height: 1;
+      font-size: 0.7rem;
+      color: var(--muted);
     }
 
-    nav ul {
-      list-style: none;
+    .lang-switch {
       display: flex;
+      gap: 0.4rem;
       align-items: center;
-      gap: 1rem;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
 
-    nav a {
-      padding: 0.4rem 0.8rem;
+    .lang-btn {
       border-radius: 999px;
-      transition: background 0.2s, color 0.2s, transform 0.1s;
-      color: #cbd5f5;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      padding: 0.1rem 0.55rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      transition: all 0.2s ease;
     }
 
-    nav a:hover {
-      background: rgba(37, 99, 235, 0.2);
-      color: #e5e7eb;
-      transform: translateY(-1px);
+    .lang-btn.active,
+    .lang-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
-    .cta-btn {
-      background: linear-gradient(135deg, #22d3ee, #2563eb);
-      color: #0b1120;
-      padding: 0.45rem 1rem;
-      border-radius: 999px;
-      font-weight: 600;
-      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    main {
+      flex: 1;
     }
 
-    .cta-btn:hover {
-      background: linear-gradient(135deg, #38bdf8, #1d4ed8);
-      color: #f9fafb;
-    }
-
-    /* ---------- SECTION HERO ---------- */
     .hero {
-      padding: 2.5rem 0 1.5rem;
-    }
-
-    .hero-grid {
+      max-width: 1200px;
+      margin: 1.5rem auto 1rem auto;
+      padding: 0 1.5rem;
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr);
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
       gap: 2rem;
       align-items: center;
     }
 
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(15, 23, 42, 0.8);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
     .hero-title {
-      font-size: 2.1rem;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-      background: linear-gradient(120deg, #e5e7eb, #38bdf8, #a855f7);
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(to right, #22d3ee, #a855f7);
       -webkit-background-clip: text;
-      background-clip: text;
       color: transparent;
     }
 
-    .hero-highlight {
-      display: inline-block;
-      background: rgba(56, 189, 248, 0.1);
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      margin-bottom: 0.75rem;
-      color: #67e8f9;
-      border: 1px solid rgba(56, 189, 248, 0.4);
-    }
-
-    .hero-text {
+    .hero-subtitle {
       font-size: 0.95rem;
-      color: #9ca3af;
+      color: var(--muted);
+      max-width: 32rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
       margin-bottom: 1.2rem;
     }
 
-    .hero-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .pill {
+    .btn-primary,
+    .btn-ghost {
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
       font-size: 0.8rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      color: #d1d5db;
-    }
-
-    .hero-small {
-      font-size: 0.8rem;
-      color: #6b7280;
-    }
-
-    /* ---------- BLOC 3D ---------- */
-    .viewer-card {
-      background: radial-gradient(circle at top, #1e293b, #020617);
-      border-radius: 1.25rem;
-      padding: 1rem;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.9);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .viewer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.7rem;
-    }
-
-    .viewer-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-
-    .viewer-badge {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.15);
-      color: #bbf7d0;
-      border: 1px solid rgba(34, 197, 94, 0.5);
-    }
-
-    .model-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 0.7rem;
-    }
-
-    .model-btn {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(59, 130, 246, 0.5);
-      background: rgba(15, 23, 42, 0.7);
-      color: #bfdbfe;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
     }
 
-    .model-btn.active {
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-      color: #f9fafb;
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+    .btn-primary {
+      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+      color: #0b1120;
+      font-weight: 600;
+      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.4);
     }
 
-    .model-btn:hover {
+    .btn-primary:hover {
+      filter: brightness(1.05);
       transform: translateY(-1px);
     }
 
-    model-viewer {
-      width: 100%;
-      height: 380px;
-      border-radius: 1rem;
-      overflow: hidden;
-      background: radial-gradient(circle at 10% 20%, #1d4ed8, #0f172a 45%, #020617 80%);
-      border: 1px solid rgba(37, 99, 235, 0.5);
+    .btn-ghost {
+      border-color: var(--border);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--muted);
     }
 
-    .model-caption {
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-      color: #9ca3af;
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: var(--accent-soft);
+    }
+
+    .hero-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.2rem;
       align-items: center;
     }
 
-    .model-caption span {
+    .hero-meta span {
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.2rem;
     }
 
-    .dot-live {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
-    }
-
-    /* ---------- SECTIONS TEXTE ---------- */
-    section {
-      padding: 1.7rem 0;
-    }
-
-    .section-title {
-      font-size: 1.4rem;
-      margin-bottom: 0.6rem;
-      color: #e5e7eb;
-    }
-
-    .section-subtitle {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      margin-bottom: 1.2rem;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-
-    .card {
-      background: radial-gradient(circle at top left, #1e293b, #020617);
-      border-radius: 1rem;
+    .hero-visual {
+      border-radius: 24px;
+      background: radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.15), transparent 55%),
+                  radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.25), transparent 60%),
+                  var(--bg-secondary);
       padding: 1rem;
-      border: 1px solid rgba(75, 85, 99, 0.7);
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(15, 23, 42, 0.9);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
     }
 
-    .card-label {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.3rem;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-      color: #e5e7eb;
-    }
-
-    .card p {
-      font-size: 0.83rem;
-      color: #9ca3af;
+    .hero-visual-title {
+      font-size: 0.9rem;
+      font-weight: 600;
       margin-bottom: 0.4rem;
     }
 
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.4rem;
+    .hero-visual-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
     }
 
-    .tag {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
+    .timeline {
+      font-size: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.3rem 0.8rem;
+    }
+
+    .timeline-item {
+      padding: 0.25rem 0.5rem;
       border-radius: 999px;
-      background: rgba(17, 24, 39, 0.8);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: #d1d5db;
-    }
-
-    /* ---------- FOOTER ---------- */
-    footer {
-      margin-top: auto;
-      border-top: 1px solid #1f2937;
-      background: #020617;
-    }
-
-    .footer-inner {
-      padding: 1rem 0;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(15, 23, 42, 0.9);
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      color: #6b7280;
+      gap: 0.4rem;
     }
 
-    .footer-links {
+    .timeline-label {
+      color: var(--muted);
+    }
+
+    .timeline-value {
+      font-weight: 600;
+      font-size: 0.72rem;
+    }
+
+    .floating-chip {
+      position: absolute;
+      right: 1.1rem;
+      top: 1.1rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .floating-badge {
+      position: absolute;
+      left: 1.1rem;
+      bottom: 1.1rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.7rem;
       display: flex;
-      gap: 0.75rem;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .floating-badge span:nth-child(1) {
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    .floating-badge span:nth-child(2) {
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .subjects-section {
+      max-width: 1200px;
+      margin: 0 auto 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .subjects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .subjects-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .subjects-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .subject-card {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.7rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .subject-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+      transform: translateY(-1px);
+      background: radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 55%),
+                  rgba(15, 23, 42, 0.95);
+    }
+
+    .subject-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .subject-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.3rem;
       flex-wrap: wrap;
     }
 
-    .footer-links a {
-      color: #9ca3af;
-    }
-
-    .footer-links a:hover {
-      color: #e5e7eb;
-      text-decoration: underline;
-    }
-
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 900px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-      }
-
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-      }
-
-      .hero-title {
-        font-size: 1.7rem;
-      }
+    footer {
+      border-top: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.7rem;
+      color: var(--muted);
+      padding: 0.6rem 1.5rem;
+      text-align: center;
+      margin-top: auto;
     }
   </style>
+  <script>
+    // Multilingue simple : FR / EN / ES
+    function setLang(lang) {
+      document.documentElement.setAttribute("data-lang", lang);
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+    }
+
+    const translations = {
+      fr: {
+        "hero.badge": "Sciences fondamentales en médecine",
+        "hero.title": "Tout le cours,",
+        "hero.title.highlight": "sur une seule plateforme",
+        "hero.subtitle": "Anatomie, physiologie, pathologie, bactériologie... avec modèles 3D, schémas et animations sur la même page pour mieux comprendre et mémoriser.",
+        "hero.btn.start": "Commencer par l’anatomie",
+        "hero.btn.all": "Voir toutes les matières",
+        "hero.meta.levels": "Tous les niveaux d’études en médecine",
+        "hero.meta.langs": "Français · Anglais · Espagnol",
+        "subjects.title": "Matières",
+        "subjects.subtitle": "Choisissez une matière pour afficher les organes, pathologies et modèles 3D associés."
+      },
+      en: {
+        "hero.badge": "Basic medical sciences",
+        "hero.title": "All your courses,",
+        "hero.title.highlight": "in one single platform",
+        "hero.subtitle": "Anatomy, physiology, pathology, bacteriology… with 3D models, diagrams and animations on the same page to understand and memorize better.",
+        "hero.btn.start": "Start with anatomy",
+        "hero.btn.all": "Browse all subjects",
+        "hero.meta.levels": "All years of medical school",
+        "hero.meta.langs": "French · English · Spanish",
+        "subjects.title": "Subjects",
+        "subjects.subtitle": "Choose a subject to explore organs, diseases and linked 3D models."
+      },
+      es: {
+        "hero.badge": "Ciencias médicas fundamentales",
+        "hero.title": "Todos tus cursos,",
+        "hero.title.highlight": "en una sola plataforma",
+        "hero.subtitle": "Anatomía, fisiología, patología, bacteriología… con modelos 3D, esquemas y animaciones en la misma página para comprender y memorizar mejor.",
+        "hero.btn.start": "Empezar con anatomía",
+        "hero.btn.all": "Ver todas las materias",
+        "hero.meta.levels": "Todos los niveles de estudios de medicina",
+        "hero.meta.langs": "Francés · Inglés · Español",
+        "subjects.title": "Materias",
+        "subjects.subtitle": "Elija una materia para ver los órganos, patologías y modelos 3D asociados."
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", function () {
+      setLang("fr");
+    });
+  </script>
 </head>
-
 <body>
-  <!-- HEADER -->
   <header>
-    <div class="container">
-      <div class="header-inner">
-        <div class="logo">
-          <div class="logo-icon">H3</div>
-          <div>
-            <div class="logo-text-main">Human3D Clinic</div>
-            <div class="logo-text-sub">anatomie & pathologie en 3D</div>
-          </div>
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-icon">3D</div>
+        <div>
+          <div class="logo-text-main">Human3D Clinic</div>
+          <div class="logo-text-sub">Sciences fondamentales en médecine</div>
         </div>
-
-        <nav>
-          <ul>
-            <li><a href="#anatomie">Anatomie 3D</a></li>
-            <li><a href="#pathologies">Pathologies</a></li>
-            <li><a href="#pedagogie">Pédagogie</a></li>
-            <li><a href="#contact" class="cta-btn">Contact / Démo</a></li>
-          </ul>
-        </nav>
       </div>
-    </div>
+      <div class="lang-switch">
+        <span style="color:#6b7280;font-size:0.75rem;">Langues :</span>
+        <button class="lang-btn active" data-lang="fr" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+      </div>
+    </nav>
   </header>
 
-  <!-- HERO + VIEWER -->
-  <main class="container">
-    <section class="hero" id="anatomie">
-      <div class="hero-grid">
-        <!-- Texte gauche -->
-        <div>
-          <div class="hero-highlight">Modèles 3D interactifs du corps humain</div>
-          <h1 class="hero-title">
-            Explorez l'anatomie & les principales pathologies
-            <br />
-            <span style="font-size: 1.15rem; font-weight: 400">
-              directement dans votre navigateur.
-            </span>
-          </h1>
-          <p class="hero-text">
-            Faites tourner, zoomez, isolez les régions clés du corps humain.
-            Cette page est un exemple simple que vous pouvez installer sur
-            votre propre domaine, personnaliser et enrichir avec vos modèles 3D
-            (anatomie normale & pathologique).
-          </p>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="hero-badge" data-i18n="hero.badge">
+          Sciences fondamentales en médecine
+        </div>
+        <h1 class="hero-title">
+          <span data-i18n="hero.title">Tout le cours,</span><br />
+          <span data-i18n="hero.title.highlight">sur une seule plateforme</span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">
+          Anatomie, physiologie, pathologie, bactériologie... avec modèles 3D, schémas et animations sur la même page pour mieux comprendre et mémoriser.
+        </p>
 
-          <div class="hero-pills">
-            <span class="pill">Rotation à la souris</span>
-            <span class="pill">Zoom molette / pincement</span>
-            <span class="pill">Anatomie normale & pathologique</span>
-            <span class="pill">Compatible mobile</span>
-          </div>
-
-          <p class="hero-small">
-            Astuce : pour plaire aux internautes, ajoutez des explications
-            simples, des quiz, et des cas cliniques illustrés avec vos modèles
-            3D.
-          </p>
+        <div class="hero-actions">
+          <button class="btn-primary" data-i18n="hero.btn.start">
+            Commencer par l’anatomie
+          </button>
+          <button class="btn-ghost" data-i18n="hero.btn.all">
+            Voir toutes les matières
+          </button>
         </div>
 
-        <!-- Viewer 3D droite -->
-        <div class="viewer-card">
-          <div class="viewer-header">
-            <div class="viewer-title">Visualiseur 3D – Corps humain</div>
-            <div class="viewer-badge">Mode interactif</div>
-          </div>
+        <div class="hero-meta">
+          <span>📚 <span data-i18n="hero.meta.levels">Tous les niveaux d’études en médecine</span></span>
+          <span>🌐 <span data-i18n="hero.meta.langs">Français · Anglais · Espagnol</span></span>
+        </div>
+      </div>
 
-          <!-- Barre de boutons pour changer de modèle -->
-          <div class="model-toolbar">
-            <button class="model-btn active" data-model="normal">
-              Corps entier (normal)
-            </button>
-            <button class="model-btn" data-model="heart">
-              Cœur – Pathologie
-            </button>
-            <button class="model-btn" data-model="brain">
-              Cerveau – AVC
-            </button>
+      <!-- VISUEL 3D PLACEHOLDER -->
+      <div class="hero-visual">
+        <div class="hero-visual-title">Exemple : Cœur – Appareil cardiovasculaire</div>
+        <div class="hero-visual-sub">
+          Vue 3D + schémas + résumé clinique sur la même page.
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-label">Système</span>
+            <span class="timeline-value">Cardiovasculaire</span>
           </div>
-
-          <!-- Model Viewer -->
-          <!-- IMPORTANT :
-               Remplacez les fichiers .glb par VOS propres modèles 3D plus tard -->
-          <model-viewer
-            id="humanModel"
-            src="models/human_body_normal.glb"
-            alt="Modèle 3D du corps humain"
-            camera-controls
-            auto-rotate
-            interaction-prompt="auto"
-            exposure="1.1"
-            shadow-intensity="1"
-            ar
-          >
-          </model-viewer>
-
-          <div class="model-caption">
-            <span>
-              <span class="dot-live"></span> Modèle actif :
-              <strong id="modelName">Corps entier (anatomie normale)</strong>
-            </span>
-            <span>Glisser pour tourner · Molette pour zoomer</span>
+          <div class="timeline-item">
+            <span class="timeline-label">Vascularisation</span>
+            <span class="timeline-value">Coronaires, aorte</span>
           </div>
+          <div class="timeline-item">
+            <span class="timeline-label">Drainage</span>
+            <span class="timeline-value">Veines caves, pulmonaires</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-label">Innervation</span>
+            <span class="timeline-value">Syst. ortho/para</span>
+          </div>
+        </div>
+
+        <div class="floating-chip">
+          🔁 Anatomie & Pathologie en 3D
+        </div>
+        <div class="floating-badge">
+          <span>Niveau</span>
+          <span>1re → 6e année</span>
         </div>
       </div>
     </section>
 
-    <!-- SECTION PATHOLOGIES -->
-    <section id="pathologies">
-      <h2 class="section-title">Pathologies illustrées en 3D</h2>
-      <p class="section-subtitle">
-        Quelques exemples de pathologies que vous pouvez représenter avec vos
-        modèles 3D : cardiologie, neurologie, orthopédie, pneumologie, etc.
-        Chaque modèle peut être accompagné d’un texte pédagogique, de schémas,
-        de liens vers des articles ou des vidéos.
-      </p>
-      <div class="cards-grid">
-        <article class="card">
-          <div class="card-label">Cardiologie</div>
-          <div class="card-title">Infarctus du myocarde</div>
-          <p>
-            Modéliser le cœur, les coronaires et les zones ischémiques permet
-            d’expliquer visuellement les conséquences d’une obstruction
-            coronarienne.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Cœur 3D</span>
-            <span class="tag">Coronaires</span>
-            <span class="tag">Éducation patient</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-label">Neurologie</div>
-          <div class="card-title">Accident vasculaire cérébral (AVC)</div>
-          <p>
-            Montrer les territoires vasculaires et les zones de nécrose permet
-            de comprendre l’urgence de la prise en charge, l’imagerie et les
-            séquelles possibles.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Cerveau</span>
-            <span class="tag">Artères cérébrales</span>
-            <span class="tag">Rehab</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-label">Orthopédie</div>
-          <div class="card-title">Arthrose du genou</div>
-          <p>
-            Superposer l’anatomie normale avec l’usure du cartilage aide à
-            visualiser les mécanismes douloureux et les indications
-            thérapeutiques (infiltration, prothèse).
-          </p>
-          <div class="tag-list">
-            <span class="tag">Cartilage</span>
-            <span class="tag">Prothèse</span>
-            <span class="tag">Cinématique</span>
-          </div>
-        </article>
+    <!-- MATIÈRES -->
+    <section class="subjects-section">
+      <div class="subjects-header">
+        <div class="subjects-title" data-i18n="subjects.title">Matières</div>
+        <div class="subjects-subtitle" data-i18n="subjects.subtitle">
+          Choisissez une matière pour afficher les organes, pathologies et modèles 3D associés.
+        </div>
       </div>
-    </section>
 
-    <!-- SECTION PÉDAGOGIE -->
-    <section id="pedagogie">
-      <h2 class="section-title">Rendre la page attractive pour les internautes</h2>
-      <p class="section-subtitle">
-        Pour que votre site soit apprécié et partagé, pensez à ajouter :
-      </p>
-      <div class="cards-grid">
-        <article class="card">
-          <div class="card-label">Interaction</div>
-          <div class="card-title">Manipulation intuitive</div>
-          <p>
-            Utilisez des boutons clairs (comme ci-dessus) pour changer de
-            modèle, de pathologie ou de vue (antérieure, postérieure, coupe
-            sagittale…).
-          </p>
-        </article>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <div class="subject-name">Anatomie</div>
+          <div class="subject-meta">
+            <span>Organes, systèmes, régions</span>
+            <span>+ modèles 3D</span>
+          </div>
+        </div>
 
-        <article class="card">
-          <div class="card-label">Pédagogie</div>
-          <div class="card-title">Texte simple & schémas</div>
-          <p>
-            Expliquez chaque structure avec des phrases courtes, des schémas
-            annotés et, si possible, des vidéos courtes de 1–3 minutes.
-          </p>
-        </article>
+        <div class="subject-card">
+          <div class="subject-name">Physiologie</div>
+          <div class="subject-meta">
+            <span>Mécanismes fonctionnels</span>
+            <span>courbes & schémas</span>
+          </div>
+        </div>
 
-        <article class="card">
-          <div class="card-label">Engagement</div>
-          <div class="card-title">Quiz & cas cliniques</div>
-          <p>
-            Proposez des mini-quiz (QCM) et des cas cliniques illustrés avec
-            vos modèles 3D pour augmenter le temps passé sur la page.
-          </p>
-        </article>
+        <div class="subject-card">
+          <div class="subject-name">Pathologie</div>
+          <div class="subject-meta">
+            <span>Lésions, mécanismes</span>
+            <span>corrélations clinico-patho</span>
+          </div>
+        </div>
 
-        <article class="card">
-          <div class="card-label">Référencement</div>
-          <div class="card-title">SEO & partage</div>
-          <p>
-            Ajoutez un blog, des articles et des mots-clés pertinents
-            (anatomie, 3D, pathologie, spécialité). Placez des boutons de
-            partage vers les réseaux sociaux.
-          </p>
-        </article>
-      </div>
-    </section>
-  <!-- COURS : ANATOMIE DU CŒUR -->
-  <section id="coeur-anatomie" class="cours-bloc">
-    <h2>Anatomie du cœur (niveau débutant)</h2>
+        <div class="subject-card">
+          <div class="subject-name">Biochimie</div>
+          <div class="subject-meta">
+            <span>Métabolisme, enzymes</span>
+            <span>tableaux & voies</span>
+          </div>
+        </div>
 
-    <!-- Zone image : tu pourras mettre une vraie image plus tard -->
-    <figure class="illustration">
-      <img src="images/coeur-schema.png" alt="Schéma simplifié du cœur" />
-      <figcaption>Schéma simplifié du cœur avec ses principales cavités et vaisseaux.</figcaption>
-    </figure>
+        <div class="subject-card">
+          <div class="subject-name">Biologie cellulaire</div>
+          <div class="subject-meta">
+            <span>Cellule, organites</span>
+            <span>animations & schémas</span>
+          </div>
+        </div>
 
-    <h3>1. Rôle du cœur</h3>
-    <p>
-      Le cœur est une pompe musculaire qui fait circuler le sang dans tout l’organisme.
-      Il envoie le sang vers les poumons pour l’oxygéner et vers les organes pour leur apporter
-      oxygène et nutriments.
-    </p>
+        <div class="subject-card">
+          <div class="subject-name">Histologie</div>
+          <div class="subject-meta">
+            <span>Tissus & lames</span>
+            <span>microphotographies</span>
+          </div>
+        </div>
 
-    <h3>2. Les quatre cavités</h3>
-    <p>Le cœur est divisé en quatre cavités&nbsp;:</p>
-    <ul>
-      <li><strong>Oreillette droite</strong> : reçoit le sang pauvre en oxygène provenant du corps.</li>
-      <li><strong>Ventricule droit</strong> : envoie ce sang vers les poumons (circulation pulmonaire).</li>
-      <li><strong>Oreillette gauche</strong> : reçoit le sang riche en oxygène venant des poumons.</li>
-      <li><strong>Ventricule gauche</strong> : envoie ce sang vers tout le corps (circulation systémique).</li>
-    </ul>
+        <div class="subject-card">
+          <div class="subject-name">Bactériologie</div>
+          <div class="subject-meta">
+            <span>Gram+, Gram−</span>
+            <span>structure & antibiotiques</span>
+          </div>
+        </div>
 
-    <h3>3. Les principales valvules</h3>
-    <p>Les valvules cardiaques assurent un sens unique à l’écoulement du sang&nbsp;:</p>
-    <ul>
-      <li><strong>Valvule tricuspide</strong> : entre oreillette droite et ventricule droit.</li>
-      <li><strong>Valvule pulmonaire</strong> : entre ventricule droit et artère pulmonaire.</li>
-      <li><strong>Valvule mitrale (biscuspide)</strong> : entre oreillette gauche et ventricule gauche.</li>
-      <li><strong>Valvule aortique</strong> : entre ventricule gauche et aorte.</li>
-    </ul>
+        <div class="subject-card">
+          <div class="subject-name">Virologie</div>
+          <div class="subject-meta">
+            <span>Structure virale</span>
+            <span>cycle & pathologie</span>
+          </div>
+        </div>
 
-    <h3>4. Les gros vaisseaux à connaître</h3>
-    <ul>
-      <li><strong>Veines caves supérieure et inférieure</strong> : amènent le sang pauvre en O₂ au cœur droit.</li>
-      <li><strong>Artère pulmonaire</strong> : envoie le sang du cœur droit vers les poumons.</li>
-      <li><strong>Veines pulmonaires</strong> : ramènent le sang oxygéné des poumons au cœur gauche.</li>
-      <li><strong>Aorte</strong> : distribue le sang oxygéné à tout l’organisme.</li>
-    </ul>
+        <div class="subject-card">
+          <div class="subject-name">Génétique</div>
+          <div class="subject-meta">
+            <span>ADN, gènes, mutations</span>
+            <span>arbres & cartes</span>
+          </div>
+        </div>
 
-    <h3>5. À retenir pour les examens</h3>
-    <ul class="points-clefs">
-      <li>Le cœur a 4 cavités : 2 oreillettes, 2 ventricules.</li>
-      <li>Le côté droit gère la <strong>circulation pulmonaire</strong> (vers les poumons).</li>
-      <li>Le côté gauche gère la <strong>circulation systémique</strong> (vers le reste du corps).</li>
-      <li>Les valvules empêchent le reflux du sang (circulation à sens unique).</li>
-    </ul>
-  </section>
+        <div class="subject-card">
+          <div class="subject-name">Psychopathologie</div>
+          <div class="subject-meta">
+            <span>Symptômes & syndromes</span>
+            <span>schémas explicatifs</span>
+          </div>
+        </div>
 
-    <!-- SECTION CONTACT -->
-    <section id="contact">
-      <h2 class="section-title">Contact / Installation sur votre domaine</h2>
-      <p class="section-subtitle">
-        Remplacez ce bloc par votre formulaire de contact ou vos coordonnées.
-      </p>
-      <div class="cards-grid">
-        <article class="card">
-          <div class="card-label">Étape 1</div>
-          <div class="card-title">Choisir un nom de domaine</div>
-          <p>
-            Exemple de domaine : <strong>human3dclinic.com</strong> (ou un nom
-            de votre choix). Vous pouvez l’acheter sur un registrar (OVH,
-            Namecheap, LWS, etc.).
-          </p>
-        </article>
+        <div class="subject-card">
+          <div class="subject-name">Sémiologie</div>
+          <div class="subject-meta">
+            <span>Signes cliniques</span>
+            <span>examens & schémas</span>
+          </div>
+        </div>
 
-        <article class="card">
-          <div class="card-label">Étape 2</div>
-          <div class="card-title">Hébergement web</div>
-          <p>
-            Prenez un hébergement simple (mutualisé) qui permet de déposer des
-            fichiers HTML. Vous aurez un accès FTP ou un gestionnaire de
-            fichiers.
-          </p>
-        </article>
+        <div class="subject-card">
+          <div class="subject-name">Autres…</div>
+          <div class="subject-meta">
+            <span>Immuno, etc.</span>
+            <span>à compléter</span>
+          </div>
+        </div>
 
-        <article class="card">
-          <div class="card-label">Étape 3</div>
-          <div class="card-title">Envoyer la page</div>
-          <p>
-            Uploadez ce fichier <code>index.html</code> (et le dossier
-            <code>models</code> avec vos modèles 3D) dans le dossier
-            <code>www</code>, <code>public_html</code> ou similaire de votre
-            hébergeur.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="card-label">Étape 4</div>
-          <div class="card-title">Associer domaine & site</div>
-          <p>
-            Dans le panneau de votre hébergeur, faites pointer le domaine vers
-            le dossier où vous avez mis <code>index.html</code>. Attendez la
-            propagation DNS (quelques heures), puis testez dans le navigateur.
-          </p>
-        </article>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <div>
-          © <span id="year"></span> Human3D Clinic · Exemple pédagogique d’interface
-          3D.
-        </div>
-        <div class="footer-links">
-          <a href="#anatomie">Anatomie</a>
-          <a href="#pathologies">Pathologies</a>
-          <a href="#pedagogie">Pédagogie</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </div>
-    </div>
+    Human3D Clinic – Plateforme d’anatomie & sciences fondamentales en 3D · Projet éducatif
   </footer>
-
-  <!-- JS : changement de modèles & année dynamique -->
-  <script>
-    // Mise à jour de l'année dans le footer
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    const modelViewer = document.getElementById("humanModel");
-    const modelNameSpan = document.getElementById("modelName");
-    const buttons = document.querySelectorAll(".model-btn");
-
-    // Objets de configuration pour chaque modèle
-    const modelsConfig = {
-      normal: {
-        src: "models/human_body_normal.glb",
-        name: "Corps entier (anatomie normale)",
-      },
-      heart: {
-        src: "models/heart_pathology.glb",
-        name: "Cœur – modèle pathologique (ex. infarctus)",
-      },
-      brain: {
-        src: "models/brain_stroke.glb",
-        name: "Cerveau – modèle AVC ischémique",
-      },
-    };
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const key = btn.getAttribute("data-model");
-
-        // Changer le modèle
-        const conf = modelsConfig[key];
-        if (conf) {
-          modelViewer.src = conf.src;
-          modelNameSpan.textContent = conf.name;
-        }
-
-        // Mettre à jour l'état visuel des boutons
-        buttons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-      });
-    });
-  </script>
 </body>
 </html>
-
-
