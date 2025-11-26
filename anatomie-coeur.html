@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Anatomie — Cœur · Human3D Clinic</title>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root{--bg:#050816;--card:#0f172a;--muted:#9ca3af;--accent:#22d3ee;--radius:16px;--text:#f8fafc}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#07102a,#02040a);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;color:var(--text)}
+    .container{max-width:1200px;margin:24px auto;padding:20px}
+    .card{background:rgba(15,23,42,0.65);border:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(6px);border-radius:var(--radius);padding:16px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;color:#041023}
+    h1{font-size:1.3rem;margin:0}
+    .sub{color:var(--muted);font-size:0.9rem}
+
+    .layout{display:grid;grid-template-columns:380px 1fr;gap:18px;margin-top:16px}
+    @media(max-width:940px){.layout{grid-template-columns:1fr;}.left{order:2}.right{order:1}}
+
+    .left{min-height:420px}
+    .section-title{font-weight:700;margin-bottom:8px}
+    .meta-list{display:flex;flex-direction:column;gap:8px}
+    .meta-item{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+    .meta-item h3{margin:0;font-size:0.95rem}
+    .meta-item p{margin:6px 0 0;color:var(--muted);font-size:0.88rem}
+
+    .cta{display:flex;gap:8px;margin-top:12px}
+    .btn{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;background:transparent;color:var(--text);font-weight:600}
+    .btn.primary{background:linear-gradient(90deg,#22d3ee,#7c3aed);color:#041023}
+
+    /* right: 3D area */
+    .right{display:flex;flex-direction:column;gap:12px}
+    .viewer-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);min-height:420px;background:linear-gradient(180deg,rgba(15,23,42,0.6),rgba(4,8,13,0.6));display:flex;align-items:center;justify-content:center}
+
+    /* model-viewer styling */
+    model-viewer{width:100%;height:420px;background:transparent}
+
+    .controls{display:flex;gap:8px;align-items:center}
+    .tabs{display:flex;gap:6px}
+    .tab{padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .tab.active{background:rgba(34,211,238,0.12);border-color:rgba(34,211,238,0.3)}
+
+    .info-row{display:flex;gap:12px;flex-wrap:wrap}
+    .small-card{background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);font-size:0.85rem}
+
+    .tabs-legend{color:var(--muted);font-size:0.85rem}
+
+    /* responsive text area */
+    .text-content{margin-top:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+    .text-content h4{margin:0 0 8px 0}
+    .text-content ul{margin:0 0 8px 18px;color:var(--muted)}
+
+    footer{margin-top:18px;color:var(--muted);font-size:0.85rem;text-align:center}
+  </style>
+
+  <!-- model-viewer (utilisation simple pour .glb interactifs) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <header>
+        <div class="logo">3D</div>
+        <div>
+          <h1>Anatomie — Cœur</h1>
+          <div class="sub">Appareil cardiovasculaire · vue 3D interactive · FR / EN / ES
+          </div>
+        </div>
+      </header>
+
+      <div class="layout">
+        <!-- LEFT: details, listes, résumé clinique -->
+        <aside class="left">
+          <div class="section-title">Détails rapides</div>
+
+          <div class="meta-list">
+            <div class="meta-item">
+              <h3>Système</h3>
+              <p>Appareil cardiovasculaire</p>
+            </div>
+
+            <div class="meta-item">
+              <h3>Vascularisation</h3>
+              <p>Artères coronaires, aorte, artère pulmonaire</p>
+            </div>
+
+            <div class="meta-item">
+              <h3>Drainage veineux</h3>
+              <p>Veines pulmonaires, veine cave supérieure, veine cave inférieure</p>
+            </div>
+
+            <div class="meta-item">
+              <h3>Innervation</h3>
+              <p>Système nerveux sympathique et parasympathique</p>
+            </div>
+
+            <div class="meta-item">
+              <h3>Comprend</h3>
+              <p>Ventricule gauche, ventricule droit, atrium gauche, atrium droit, valves (mitrale, tricuspide, aortique, pulmonaire), muscle cardiaque, péricarde</p>
+            </div>
+
+          </div>
+
+          <div class="cta">
+            <button class="btn primary" id="open-3d">Ouvrir vue 3D</button>
+            <button class="btn" id="download-glb">Télécharger modèle (.glb)</button>
+          </div>
+
+          <div class="text-content" id="clinical-summary">
+            <h4>Résumé clinique</h4>
+            <p style="color:var(--muted)">Notions clés pour l'étudiant : anatomie des valves, circulation coronaire, zones d'innervation, signes d'insuffisance cardiaque et principes de l'examen clinique (auscultation, palpation, évaluation hémodynamique).</p>
+
+            <h4>Points d'apprentissage</h4>
+            <ul>
+              <li>Identifier les territoires irrigués par les artères coronaires droite et gauche.</li>
+              <li>Reconnaître les bruits valvulaires (systolique/diastolique) et leur corrélation anatomique.</li>
+              <li>Comprendre le rôle du péricarde et les signes de péricardite.</li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- RIGHT: 3D viewer + contrôles -->
+        <section class="right">
+          <div class="viewer-wrap card">
+            <!-- model-viewer: placez vos fichiers .glb dans /models/ et nommez-les comme indiqué ci-dessous -->
+            <model-viewer id="mv" ios-src="/models/heart_pathology.glb" src="/models/heart_pathology.glb" alt="Modèle 3D du coeur" shadow-intensity="1" camera-controls touch-action="pan-y" auto-rotate ar ar-modes="webxr scene-viewer quick-look" exposure="1" style="background:transparent"></model-viewer>
+          </div>
+
+          <div class="controls">
+            <div class="tabs" role="tablist">
+              <div class="tab active" data-src="/models/heart_pathology.glb">Pathologie</div>
+              <div class="tab" data-src="/models/heart_normal.glb">Anatomie normale</div>
+            </div>
+
+            <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+              <div class="tabs-legend">Affichage :</div>
+              <button class="btn" id="view-wires">Fil de fer</button>
+              <button class="btn" id="view-solid">Solide</button>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="small-card">Rotation automatique: <strong id="auto-rotate">ON</strong></div>
+            <div class="small-card">Lumière: <span class="sub">Standard</span></div>
+            <div class="small-card">Fichier actif: <strong id="active-file">heart_pathology.glb</strong></div>
+          </div>
+
+          <div class="text-content" style="margin-top:6px">
+            <h4>Schémas & onglets</h4>
+            <p style="color:var(--muted)">Ici vous pouvez ajouter des schémas 2D, des animations (mp4/svgs) et des fiches révision en PDF. Chaque élément peut être organisé en onglets reliés au même modèle 3D.</p>
+          </div>
+        </section>
+      </div>
+
+      <footer>Astuce : placez vos modèles dans le dossier <code>/models/</code> et nommez-les <code>heart_pathology.glb</code> et (optionnel) <code>heart_normal.glb</code> pour basculer facilement.</footer>
+    </div>
+  </div>
+
+  <script>
+    // Comportement des onglets et contrôles
+    const tabs = document.querySelectorAll('.tab');
+    const mv = document.getElementById('mv');
+    const activeFileLabel = document.getElementById('active-file');
+    const autoRotateLabel = document.getElementById('auto-rotate');
+
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const src = t.dataset.src;
+      // vérification simple: si le fichier n'existe pas, on garde le modèle actuel
+      mv.src = src;
+      mv.setAttribute('src', src);
+      activeFileLabel.textContent = src.split('/').pop();
+    }));
+
+    // ouvri le viewer (scroll into view)
+    document.getElementById('open-3d').addEventListener('click', () => {
+      document.querySelector('.viewer-wrap').scrollIntoView({behavior:'smooth',block:'center'});
+    });
+
+    // télécharger le fichier actuel
+    document.getElementById('download-glb').addEventListener('click', () => {
+      const url = mv.getAttribute('src');
+      // création d'un lien de téléchargement direct
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = url.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    // view modes (très simple: toggle exposition / reveal normal)
+    document.getElementById('view-wires').addEventListener('click', () => {
+      // model-viewer doesn't provide wireframe out of the box; we toggle exposure as placeholder
+      mv.exposure = 0.6;
+      mv.autoRotate = false;
+      autoRotateLabel.textContent = 'OFF';
+    });
+    document.getElementById('view-solid').addEventListener('click', () => {
+      mv.exposure = 1;
+      mv.autoRotate = true;
+      autoRotateLabel.textContent = 'ON';
+    });
+
+    // Quelques attributs par défaut
+    mv.style.maxWidth = '100%';
+    mv.setAttribute('camera-controls','');
+    mv.setAttribute('auto-rotate','');
+
+  </script>
+</body>
+</html>
