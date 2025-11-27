@@ -430,7 +430,7 @@
         "hero.meta.levels": "Todos los niveles de estudios de medicina",
         "hero.meta.langs": "Francés · Inglés · Español",
         "subjects.title": "Materias",
-        "subjects.subtitle": "Elija una materia para ver los órganos, patologías y modelos 3D asociados."
+        "subjects.subtitle": "Elija una materia para ver los órgãos, patologías y modelos 3D asociados."
       }
     };
 
@@ -438,7 +438,12 @@
       setLang("fr");
     });
   </script>
+
+  <!-- MOTEUR 3D : model-viewer pour afficher les fichiers .glb -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
+
+  
 <body>
   <header>
     <nav class="nav">
@@ -461,6 +466,7 @@
   <main>
     <!-- HERO -->
     <section class="hero">
+      
       <div>
         <div class="hero-badge" data-i18n="hero.badge">
           Sciences fondamentales en médecine
@@ -487,42 +493,52 @@
           <span>🌐 <span data-i18n="hero.meta.langs">Français · Anglais · Espagnol</span></span>
         </div>
       </div>
+<!-- VISUEL 3D PLACEHOLDER -->
+<div class="hero-visual">
 
-      <!-- VISUEL 3D PLACEHOLDER -->
-      <div class="hero-visual">
-        <div class="hero-visual-title">Exemple : Cœur – Appareil cardiovasculaire</div>
-        <div class="hero-visual-sub">
-          Vue 3D + schémas + résumé clinique sur la même page.
-        </div>
-        <div class="timeline">
-          <div class="timeline-item">
-            <span class="timeline-label">Système</span>
-            <span class="timeline-value">Cardiovasculaire</span>
-          </div>
-          <div class="timeline-item">
-            <span class="timeline-label">Vascularisation</span>
-            <span class="timeline-value">Coronaires, aorte</span>
-          </div>
-          <div class="timeline-item">
-            <span class="timeline-label">Drainage</span>
-            <span class="timeline-value">Veines caves, pulmonaires</span>
-          </div>
-          <div class="timeline-item">
-            <span class="timeline-label">Innervation</span>
-            <span class="timeline-value">Syst. ortho/para</span>
-          </div>
-        </div>
+  <model-viewer
+    src="heart_pathology.glb"
+    alt="Modèle 3D du cœur humain"
+    camera-controls
+    auto-rotate
+    style="width: 100%; height: 220px; border-radius: 16px; background:#020617; margin-bottom: 0.75rem;"
+  ></model-viewer>
 
-        <div class="floating-chip">
-          🔁 Anatomie & Pathologie en 3D
-        </div>
-        <div class="floating-badge">
-          <span>Niveau</span>
-          <span>1re → 6e année</span>
-        </div>
-      </div>
-    </section>
+  <div class="hero-visual-title">Exemple : Cœur – Appareil cardiovasculaire</div>
+  <div class="hero-visual-sub">
+    Vue 3D + schémas + résumé clinique sur la même page.
+  </div>
 
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="timeline-label">Système</span>
+      <span class="timeline-value">Cardiovasculaire</span>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-label">Vascularisation</span>
+      <span class="timeline-value">Coronaires, aorte</span>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-label">Drainage</span>
+      <span class="timeline-value">Veines caves, pulmonaires</span>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-label">Innervation</span>
+      <span class="timeline-value">Syst. ortho/para</span>
+    </div>
+  </div>
+
+  <div class="floating-chip">
+    🔁 Anatomie & Pathologie en 3D
+  </div>
+  <div class="floating-badge">
+    <span>Niveau</span>
+    <span>1re → 6e année</span>
+  </div>
+
+</div>
+
+  
     <!-- MATIÈRES -->
     <section class="subjects-section">
       <div class="subjects-header">
@@ -638,3 +654,4 @@
   </footer>
 </body>
 </html>
+
