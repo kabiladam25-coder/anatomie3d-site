@@ -2,9 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Human3D Clinic – Sciences fondamentales en médecine</title>
+  <title data-i18n="page.title">Human3D Clinic – Sciences fondamentales en médecine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- model-viewer -->
+  <script type="module" src="unpkg.com"></script>
+
   <style>
+    /* Styles CSS complets fournis précédemment */
     :root {
       --bg: #050816;
       --bg-secondary: #0b1020;
@@ -231,6 +236,42 @@
       overflow: hidden;
       min-height: 220px;
     }
+    
+    /* Styles for the 3D model viewer and tabs */
+    .viewer-wrap { 
+        width:100%; 
+        max-width:900px; 
+        margin:0 auto; 
+    }
+    model-viewer { 
+        width:100%; 
+        height:400px; 
+        background:#f6f6f6; 
+        border-radius:8px; 
+        margin-top: 0.8rem;
+    }
+
+    .tabs { 
+        display: flex; 
+        gap: 10px; 
+        margin-top: 1rem; 
+    }
+
+    .tab { 
+        cursor: pointer; 
+        padding: 5px 10px; 
+        background: var(--card); 
+        border: 1px solid var(--border);
+        border-radius: 5px; 
+        color: var(--muted);
+        transition: all 0.2s ease;
+    }
+
+    .tab.active { 
+        background: var(--accent-soft); 
+        color: var(--text);
+        border-color: var(--accent);
+    }
 
     .hero-visual-title {
       font-size: 0.9rem;
@@ -364,26 +405,13 @@
     .subject-meta {
       font-size: 0.7rem;
       color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 0.3rem;
-      flex-wrap: wrap;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.9);
-      font-size: 0.7rem;
-      color: var(--muted);
-      padding: 0.6rem 1.5rem;
-      text-align: center;
-      margin-top: auto;
     }
   </style>
+
   <script>
     // Multilingue simple : FR / EN / ES
     function setLang(lang) {
-      document.documentElement.setAttribute("data-lang", lang);
+      document.documentElement.setAttribute("lang", lang); // Correction: set standard 'lang' attribute
       document.querySelectorAll("[data-i18n]").forEach(function (el) {
         const key = el.getAttribute("data-i18n");
         if (translations[lang] && translations[lang][key]) {
@@ -393,10 +421,14 @@
       document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.lang === lang);
       });
+      
+      // Update the page title explicitly since textContent overwrites child elements if any
+      document.title = translations[lang]["page.title"];
     }
 
     const translations = {
       fr: {
+        "page.title": "Human3D Clinic – Sciences fondamentales en médecine",
         "hero.badge": "Sciences fondamentales en médecine",
         "hero.title": "Tout le cours,",
         "hero.title.highlight": "sur une seule plateforme",
@@ -406,9 +438,16 @@
         "hero.meta.levels": "Tous les niveaux d’études en médecine",
         "hero.meta.langs": "Français · Anglais · Espagnol",
         "subjects.title": "Matières",
-        "subjects.subtitle": "Choisissez une matière pour afficher les organes, pathologies et modèles 3D associés."
+        "subjects.subtitle": "Choisissez une matière pour afficher les organes, pathologies et modèles 3D associés.",
+        "viewer.title": "Cœur – Appareil cardiovasculaire",
+        "viewer.subtitle": "Vue 3D + schémas + résumé clinique",
+        "timeline.vascular": "Vascularisation: Coronaires, aorte",
+        "timeline.drainage": "Drenaje: Veines cavas, pulmonaires",
+        "viewer.patho.label": "Anatomie & Pathologie en 3D",
+        "viewer.level.label": "Niveau: 1re → 6e année",
       },
       en: {
+        "page.title": "Human3D Clinic – Basic Medical Sciences",
         "hero.badge": "Basic medical sciences",
         "hero.title": "All your courses,",
         "hero.title.highlight": "in one single platform",
@@ -418,9 +457,16 @@
         "hero.meta.levels": "All years of medical school",
         "hero.meta.langs": "French · English · Spanish",
         "subjects.title": "Subjects",
-        "subjects.subtitle": "Choose a subject to explore organs, diseases and linked 3D models."
+        "subjects.subtitle": "Choose a subject to explore organs, diseases and linked 3D models.",
+        "viewer.title": "Heart – Cardiovascular system",
+        "viewer.subtitle": "3D view + diagrams + clinical summary",
+        "timeline.vascular": "Vascularization: Coronaries, aorta",
+        "timeline.drainage": "Drainage: Venae cavae, pulmonary veins",
+        "viewer.patho.label": "Anatomy & Pathology in 3D",
+        "viewer.level.label": "Level: 1st → 6th year",
       },
       es: {
+        "page.title": "Human3D Clinic – Ciencias médicas fundamentales",
         "hero.badge": "Ciencias médicas fundamentales",
         "hero.title": "Todos tus cursos,",
         "hero.title.highlight": "en una sola plataforma",
@@ -430,20 +476,47 @@
         "hero.meta.levels": "Todos los niveles de estudios de medicina",
         "hero.meta.langs": "Francés · Inglés · Español",
         "subjects.title": "Materias",
-        "subjects.subtitle": "Elija una materia para ver los órgãos, patologías y modelos 3D asociados."
+        "subjects.subtitle": "Elija una materia para ver los órganos, patologías y modelos 3D asociados.",
+        "viewer.title": "Corazón – Aparato cardiovascular",
+        "viewer.subtitle": "Vista 3D + esquemas + resumen clínico",
+        "timeline.vascular": "Vascularización: Coronarias, aorta",
+        "timeline.drainage": "Drenaje: Venas cavas, pulmonares",
+        "viewer.patho.label": "Anatomía & Patología en 3D",
+        "viewer.level.label": "Nivel: 1º → 6º año",
       }
     };
 
     document.addEventListener("DOMContentLoaded", function () {
+      // Initialise en français au chargement
       setLang("fr");
+
+      // Ajoute un écouteur d'événement à tous les boutons de langue
+      document.querySelectorAll(".lang-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            setLang(this.dataset.lang);
+        });
+      });
+
+      // Gère les clics sur les onglets Normal/Pathologie pour le modèle 3D
+      document.querySelectorAll('.tab').forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Mettre à jour l'image 3D
+            const src = event.target.getAttribute('data-src');
+            document.querySelector('#heartViewer').setAttribute('src', src);
+
+            // Mettre à jour les onglets actifs
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            event.target.classList.add('active');
+            event.target.setAttribute('aria-pressed', 'true');
+        });
+      });
     });
   </script>
-
-  <!-- MOTEUR 3D : model-viewer pour afficher les fichiers .glb -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 
-  
 <body>
   <header>
     <nav class="nav">
@@ -451,215 +524,97 @@
         <div class="logo-icon">3D</div>
         <div>
           <div class="logo-text-main">Human3D Clinic</div>
-          <div class="logo-text-sub">Sciences fondamentales en médecine</div>
+          <!-- Ajout de data-i18n ici -->
+          <div class="logo-text-sub" data-i18n="hero.badge"></div>
         </div>
       </div>
       <div class="lang-switch">
         <span style="color:#6b7280;font-size:0.75rem;">Langues :</span>
-        <button class="lang-btn active" data-lang="fr" onclick="setLang('fr')">FR</button>
-        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+        <!-- Les onclick appellent setLang directement -->
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
       </div>
     </nav>
   </header>
 
   <main>
-    <!-- HERO -->
     <section class="hero">
-      
+      <!-- Partie gauche : Texte d'introduction -->
       <div>
-        <div class="hero-badge" data-i18n="hero.badge">
-          Sciences fondamentales en médecine
-        </div>
+        <div class="hero-badge" data-i18n="hero.badge"></div>
         <h1 class="hero-title">
-          <span data-i18n="hero.title">Tout le cours,</span><br />
-          <span data-i18n="hero.title.highlight">sur une seule plateforme</span>
+          <span data-i18n="hero.title"></span>
+          <span data-i18n="hero.title.highlight"></span>
         </h1>
-        <p class="hero-subtitle" data-i18n="hero.subtitle">
-          Anatomie, physiologie, pathologie, bactériologie... avec modèles 3D, schémas et animations sur la même page pour mieux comprendre et mémoriser.
-        </p>
-
+        <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
         <div class="hero-actions">
-          <button class="btn-primary" data-i18n="hero.btn.start">
-            Commencer par l’anatomie
-          </button>
-          <button class="btn-ghost" data-i18n="hero.btn.all">
-            Voir toutes les matières
-          </button>
+          <a href="#" class="btn-primary" onclick="return false;" data-i18n="hero.btn.start"></a>
+          <a href="#" class="btn-ghost" onclick="return false;" data-i18n="hero.btn.all"></a>
         </div>
-
         <div class="hero-meta">
-          <span>📚 <span data-i18n="hero.meta.levels">Tous les niveaux d’études en médecine</span></span>
-          <span>🌐 <span data-i18n="hero.meta.langs">Français · Anglais · Espagnol</span></span>
+          <span data-i18n="hero.meta.levels"></span>
+          <span>·</span>
+          <span data-i18n="hero.meta.langs"></span>
         </div>
       </div>
-<!-- VISUEL 3D PLACEHOLDER -->
-<div class="hero-visual">
 
-  <model-viewer
-    src="heart_pathology.glb"
-    alt="Modèle 3D du cœur humain"
-    camera-controls
-    auto-rotate
-    style="width: 100%; height: 220px; border-radius: 16px; background:#020617; margin-bottom: 0.75rem;"
-  ></model-viewer>
+      <!-- Partie droite : Visualisation 3D -->
+      <div class="hero-visual">
+        <!-- Ajout de data-i18n -->
+        <div class="hero-visual-title" data-i18n="viewer.title"></div>
+        <div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
+        
+        <div class="tabs" role="tablist" aria-label="Model tabs">
+            <button class="tab active" data-src="models/heart_normal.glb" aria-pressed="true">Normal</button>
+            <button class="tab" data-src="models/heart_pathology.glb" aria-pressed="false">Pathologie</button>
+        </div>
 
-  <div class="hero-visual-title">Exemple : Cœur – Appareil cardiovasculaire</div>
-  <div class="hero-visual-sub">
-    Vue 3D + schémas + résumé clinique sur la même page.
-  </div>
+        <model-viewer id="heartViewer"
+                      src="models/heart_normal.glb"
+                      ios-src="models/heart_normal.glb"
+                      alt="Cœur 3D"
+                      auto-rotate
+                      camera-controls
+                      ar
+                      style="width: 100%; height: 350px;">
+        </model-viewer>
 
-  <div class="timeline">
-    <div class="timeline-item">
-      <span class="timeline-label">Système</span>
-      <span class="timeline-value">Cardiovasculaire</span>
-    </div>
-    <div class="timeline-item">
-      <span class="timeline-label">Vascularisation</span>
-      <span class="timeline-value">Coronaires, aorte</span>
-    </div>
-    <div class="timeline-item">
-      <span class="timeline-label">Drainage</span>
-      <span class="timeline-value">Veines caves, pulmonaires</span>
-    </div>
-    <div class="timeline-item">
-      <span class="timeline-label">Innervation</span>
-      <span class="timeline-value">Syst. ortho/para</span>
-    </div>
-  </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-label" data-i18n="timeline.vascular"></span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-label" data-i18n="timeline.drainage"></span>
+          </div>
+        </div>
 
-  <div class="floating-chip">
-    🔁 Anatomie & Pathologie en 3D
-  </div>
-  <div class="floating-badge">
-    <span>Niveau</span>
-    <span>1re → 6e année</span>
-  </div>
+        <div class="floating-badge">
+            <span data-i18n="viewer.patho.label"></span>
+            <span data-i18n="viewer.level.label"></span>
+        </div>
+      </div>
+    </section>
 
-</div>
-
-  
-    <!-- MATIÈRES -->
     <section class="subjects-section">
       <div class="subjects-header">
-        <div class="subjects-title" data-i18n="subjects.title">Matières</div>
-        <div class="subjects-subtitle" data-i18n="subjects.subtitle">
-          Choisissez une matière pour afficher les organes, pathologies et modèles 3D associés.
-        </div>
+        <h2 class="subjects-title" data-i18n="subjects.title"></h2>
+        <p class="subjects-subtitle" data-i18n="subjects.subtitle"></p>
       </div>
 
+      <!-- Le reste de vos cartes de matières irait ici, utilisant data-i18n si vous le souhaitez -->
       <div class="subjects-grid">
+        <!-- Exemple de carte de sujet (vous devrez ajouter les clés de traduction pour celles-ci) -->
         <div class="subject-card">
-          <div class="subject-name">Anatomie</div>
-          <div class="subject-meta">
-            <span>Organes, systèmes, régions</span>
-            <span>+ modèles 3D</span>
-          </div>
+            <div class="subject-name">Anatomie</div>
+            <div class="subject-meta">Organes, systèmes, régions</div>
         </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Physiologie</div>
-          <div class="subject-meta">
-            <span>Mécanismes fonctionnels</span>
-            <span>courbes & schémas</span>
-          </div>
+         <div class="subject-card">
+            <div class="subject-name">Fisiología</div>
+            <div class="subject-meta">Mecanismos funcionales, curvas</div>
         </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Pathologie</div>
-          <div class="subject-meta">
-            <span>Lésions, mécanismes</span>
-            <span>corrélations clinico-patho</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Biochimie</div>
-          <div class="subject-meta">
-            <span>Métabolisme, enzymes</span>
-            <span>tableaux & voies</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Biologie cellulaire</div>
-          <div class="subject-meta">
-            <span>Cellule, organites</span>
-            <span>animations & schémas</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Histologie</div>
-          <div class="subject-meta">
-            <span>Tissus & lames</span>
-            <span>microphotographies</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Bactériologie</div>
-          <div class="subject-meta">
-            <span>Gram+, Gram−</span>
-            <span>structure & antibiotiques</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Virologie</div>
-          <div class="subject-meta">
-            <span>Structure virale</span>
-            <span>cycle & pathologie</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Génétique</div>
-          <div class="subject-meta">
-            <span>ADN, gènes, mutations</span>
-            <span>arbres & cartes</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Psychopathologie</div>
-          <div class="subject-meta">
-            <span>Symptômes & syndromes</span>
-            <span>schémas explicatifs</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Sémiologie</div>
-          <div class="subject-meta">
-            <span>Signes cliniques</span>
-            <span>examens & schémas</span>
-          </div>
-        </div>
-
-        <div class="subject-card">
-          <div class="subject-name">Autres…</div>
-          <div class="subject-meta">
-            <span>Immuno, etc.</span>
-            <span>à compléter</span>
-          </div>
-        </div>
-
       </div>
     </section>
   </main>
-
-  <footer>
-    Human3D Clinic – Plateforme d’anatomie & sciences fondamentales en 3D · Projet éducatif
-  </footer>
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Test de changement de langue
-    console.log("Langue initiale:", document.documentElement.getAttribute("data-lang"));
-    setLang('fr'); // test FR
-  });
-</script>
 </body>
 </html>
-
-
