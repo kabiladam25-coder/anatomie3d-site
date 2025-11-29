@@ -503,17 +503,23 @@
         button.addEventListener('click', (event) => {
             // Mettre à jour l'image 3D
             const src = event.target.getAttribute('data-src');
-            document.querySelector('#heartViewer').setAttribute('src', src);
+           
+document.querySelectorAll('.tab').forEach(button => {
+    button.addEventListener('click', (event) => {
+        const src = event.target.getAttribute('data-src');
+        document.querySelector('#heartViewer').setAttribute('src', src);
 
-            // Mettre à jour les onglets actifs
-            document.querySelectorAll('.tab').forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-pressed', 'false');
-            });
-            event.target.classList.add('active');
-            event.target.setAttribute('aria-pressed', 'true');
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false'); // <-- correct ARIA
         });
-      });
+
+        event.target.classList.add('active');
+        event.target.setAttribute('aria-selected', 'true'); // <-- correct ARIA
+    });
+});
+
+          
     });
   </script>
 </head>
@@ -567,8 +573,8 @@
         <div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
         
         <div class="tabs" role="tablist" aria-label="Model tabs">
-            <button class="tab active" data-src="models/heart_normal.glb" aria-pressed="true">Normal</button>
-            <button class="tab" data-src="models/heart_pathology.glb" aria-pressed="false">Pathologie</button>
+           <button class="tab active" role="tab" aria-selected="true" data-src="models/heart_normal.glb">Normal</button>
+          <button class="tab" role="tab" aria-selected="false" data-src="models/heart_pathology.glb">Pathologie</button>  
         </div>
 
         <model-viewer id="heartViewer"
@@ -694,6 +700,7 @@
   </main>
 </body>
 </html>
+
 
 
 
