@@ -462,6 +462,8 @@
   "subject.radiologie": "Radiologie & Imagerie",
   "subject.urgences": "Urgences & Réanimation",
   "subject.sante_publique": "Santé publique & Épidémiologie"
+   "viewer.tab.normal": "Normal",
+"viewer.tab.pathologie": "Pathologie",
       },
       en: {
         "page.title": "Human3D Clinic – Basic Medical Sciences",
@@ -497,6 +499,8 @@
   "subject.radiologie": "Radiology & Imaging",
   "subject.urgences": "Emergency & ICU",
   "subject.sante_publique": "Public Health & Epidemiology"
+      "viewer.tab.normal": "Normal",
+"viewer.tab.pathologie": "Pathology",
       },
       es: {
         "page.title": "Human3D Clinic – Ciencias médicas fundamentales",
@@ -532,6 +536,8 @@
   "subject.radiologie": "Radiología & Imagen",
   "subject.urgences": "Urgencias & Reanimación",
   "subject.sante_publique": "Salud pública & Epidemiología"
+     "viewer.tab.normal": "Normal",
+"viewer.tab.pathologie": "Patología",   
       }
     };
 
@@ -617,11 +623,18 @@
         <!-- Ajout de data-i18n -->
         <div class="hero-visual-title" data-i18n="viewer.title"></div>
         <div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
-        
+
         <div class="tabs" role="tablist" aria-label="Model tabs">
-           <button class="tab active" role="tab" aria-selected="true" data-src="models/heart_normal.glb">Normal</button>
-          <button class="tab" role="tab" aria-selected="false" data-src="models/heart_pathology.glb">Pathologie</button>  
-        </div>
+  <button class="tab active" role="tab" aria-selected="true"
+          data-src="models/heart_normal.glb"
+          data-i18n="viewer.tab.normal"></button>
+
+  <button class="tab" role="tab" aria-selected="false"
+          data-src="models/heart_pathology.glb"
+          data-i18n="viewer.tab.pathologie"></button>
+</div>
+
+        
 
         <model-viewer id="heartViewer"
                       src="models/heart_normal.glb"
@@ -740,8 +753,7 @@
   </div>
 </div>
 
-  </div>
-</div>
+  
 
     </section>
  
@@ -749,6 +761,7 @@
   </main>
 </body>
 </html>
+
 
 
 
