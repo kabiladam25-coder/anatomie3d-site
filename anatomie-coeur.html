@@ -4,17 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anatomie du cœur</title>
+
+    <!-- Ton CSS global -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Style rapide spécifique à cette page -->
     <style>
-        body { background: #050816; color: #fff; font-family: sans-serif; margin: 0; padding: 20px; }
-        h1, h2, h3 { color: #22d3ee; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 10px; }
-        .tab { cursor: pointer; padding: 5px 10px; background: #222; border-radius: 5px; border: 1px solid #444; }
-        .tab.active { background: #22d3ee; color: #000; }
-        model-viewer { display: block; margin-bottom: 20px; transform-origin: center center; }
-        section.card { background: #0b1020; padding: 15px; border-radius: 10px; }
-        ul { margin: 0 0 10px 20px; }
+        body {
+            background: #050816;
+            color: #fff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #22d3ee;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .tab {
+            cursor: pointer;
+            padding: 5px 10px;
+            background: #222;
+            border-radius: 5px;
+            border: 1px solid #444;
+        }
+        .tab.active {
+            background: #22d3ee;
+            color: #000;
+        }
+        model-viewer {
+            display: block;
+            margin-bottom: 20px;
+            width: 100%;
+            height: 500px;
+        }
+        section.card {
+            background: #0b1020;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        ul {
+            margin: 0 0 10px 20px;
+        }
     </style>
+
     <!-- Model-viewer -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
@@ -22,29 +59,24 @@
     <h1>Anatomie du cœur</h1>
 
     <!-- Onglets -->
-<div class="tabs">
-    <button class="tab active" data-src="heart_normal.glb">Normal</button>
-    <button class="tab" data-src="heart_pathology.glb">Pathologie</button>
-</div>
+    <div class="tabs">
+        <button class="tab active" data-src="heart_normal.glb">Normal</button>
+        <button class="tab" data-src="heart_pathology.glb">Pathologie</button>
+    </div>
 
-<!-- Viewer 3D -->
-<model-viewer id="heartViewer"
-              src="heart_normal.glb"
-              ios-src="heart_normal.glb"
-              alt="Cœur 3D"
-              auto-rotate
-              rotation-per-second="30deg"
-              camera-controls
-              style="width: 100%; height: 500px;">
-</model-viewer>
-
-   
-      
+    <!-- Viewer 3D -->
+    <model-viewer id="heartViewer"
+                  src="heart_normal.glb"
+                  ios-src="heart_normal.glb"
+                  alt="Cœur 3D"
+                  auto-rotate
+                  rotation-per-second="30deg"
+                  camera-controls>
+    </model-viewer>
 
     <section class="card">
-        <!-- Ton contenu pédagogique existant -->
-        <h1>Anatomie du cœur</h1>
-        <p>Cette page va vous introduire à l’anatomie du cœur : morphologie, système valvulaire, vascularisation, histologie, embryologie, physiologie et explorations.</p>
+        <h2>Introduction</h2>
+        <p>Cette page vous introduit à l’anatomie du cœur : morphologie, système valvulaire, vascularisation, histologie, embryologie, physiologie et explorations.</p>
 
         <h2>I. Morphologie externe du cœur</h2>
         <ul>
@@ -54,8 +86,6 @@
             <li>Face pulmonaire gauche du cœur</li>
             <li>Apex (pointe) du cœur</li>
         </ul>
-
-        <!-- ... tout ton contenu reste identique ... -->
 
         <h2>Fiche récapitulative – Détails anatomiques</h2>
         <ul>
@@ -79,7 +109,7 @@
     </section>
 
     <script>
-        // Changement de modèle via onglets
+        // Gestion des onglets Normal / Pathologie
         const tabs = document.querySelectorAll('.tab');
         const viewer = document.getElementById('heartViewer');
 
@@ -93,20 +123,6 @@
                 viewer.iosSrc = newSrc;
             });
         });
-
-        // Battement léger du cœur
-        let scale = 1;
-        let growing = true;
-        function beat() {
-            if (scale >= 1.05) growing = false;
-            if (scale <= 0.95) growing = true;
-
-            scale += growing ? 0.001 : -0.001;
-            viewer.style.transform = `scale(${scale})`;
-            requestAnimationFrame(beat);
-        }
-        beat();
     </script>
 </body>
 </html>
-
