@@ -1,111 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anatomie du cœur</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { background: #050816; color: #fff; font-family: sans-serif; margin: 0; padding: 20px; }
-        h1, h2, h3 { color: #22d3ee; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 10px; }
-        .tab { cursor: pointer; padding: 5px 10px; background: #222; border-radius: 5px; border: 1px solid #444; }
-        .tab.active { background: #22d3ee; color: #000; }
-        model-viewer { display: block; margin-bottom: 20px; transform-origin: center center; }
-        section.card { background: #0b1020; padding: 15px; border-radius: 10px; }
-        ul { margin: 0 0 10px 20px; }
-    </style>
-    <!-- Model-viewer -->
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8" />
+  <title>Test image 3D</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- CDN Three.js -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 </head>
-<body>
-    <h1>Anatomie du cœur</h1>
-
-    <!-- Onglets -->
-<div class="tabs">
-    <button class="tab active" data-src="heart_normal.glb">Normal</button>
-    <button class="tab" data-src="heart_pathology.glb">Pathologie</button>
-</div>
-
-<!-- Viewer 3D -->
-<model-viewer id="heartViewer"
-              src="heart_normal.glb"
-              ios-src="heart_normal.glb"
-              alt="Cœur 3D"
-              auto-rotate
-              rotation-per-second="30deg"
-              camera-controls
-              style="width: 100%; height: 500px;">
-</model-viewer>
-
-   
-      
-
-    <section class="card">
-        <!-- Ton contenu pédagogique existant -->
-        <h1>Anatomie du cœur</h1>
-        <p>Cette page va vous introduire à l’anatomie du cœur : morphologie, système valvulaire, vascularisation, histologie, embryologie, physiologie et explorations.</p>
-
-        <h2>I. Morphologie externe du cœur</h2>
-        <ul>
-            <li>Base du cœur</li>
-            <li>Face sterno-costale du cœur</li>
-            <li>Face diaphragmatique du cœur</li>
-            <li>Face pulmonaire gauche du cœur</li>
-            <li>Apex (pointe) du cœur</li>
-        </ul>
-
-        <!-- ... tout ton contenu reste identique ... -->
-
-        <h2>Fiche récapitulative – Détails anatomiques</h2>
-        <ul>
-            <li><strong>Système :</strong> Appareil cardiovasculaire</li>
-            <li><strong>Vascularisation artérielle :</strong> artères coronaires, artère pulmonaire, aorte</li>
-            <li><strong>Drainage veineux :</strong> veines pulmonaires, veine cave supérieure, veine cave inférieure</li>
-            <li><strong>Innervation :</strong> système nerveux sympathique et parasympathique</li>
-            <li><strong>Le cœur comprend :</strong>
-                <ul>
-                    <li>Ventricule gauche, ventricule droit</li>
-                    <li>Atrium gauche, atrium droit</li>
-                    <li>Valve atrio-ventriculaire gauche (mitrale)</li>
-                    <li>Valve atrio-ventriculaire droite (tricuspide)</li>
-                    <li>Valve aortique</li>
-                    <li>Valve du tronc pulmonaire</li>
-                    <li>Muscle cardiaque</li>
-                    <li>Péricarde</li>
-                </ul>
-            </li>
-        </ul>
-    </section>
-
-    <script>
-        // Changement de modèle via onglets
-        const tabs = document.querySelectorAll('.tab');
-        const viewer = document.getElementById('heartViewer');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                const newSrc = tab.getAttribute('data-src');
-                viewer.src = newSrc;
-                viewer.iosSrc = newSrc;
-            });
-        });
-
-        // Battement léger du cœur
-        let scale = 1;
-        let growing = true;
-        function beat() {
-            if (scale >= 1.05) growing = false;
-            if (scale <= 0.95) growing = true;
-
-            scale += growing ? 0.001 : -0.001;
-            viewer.style.transform = `scale(${scale})`;
-            requestAnimationFrame(beat);
-        }
-        beat();
-    </script>
+<body style="margin:0; overflow:hidden; background:#000;">
+  <!-- Le canvas 3D va être créé par Three.js -->
+  <script src="script.js"></script>
 </body>
 </html>
