@@ -5,10 +5,50 @@
   <title>Test image 3D</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- CDN Three.js -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script type="module">
+  import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+  import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+  // --- SCÈNE DE BASE ---
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const light = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(light);
+
+  // --- CHARGER L'IMAGE ---
+  const textureLoader = new THREE.TextureLoader();
+  const texture = textureLoader.load('images/mon_image.png');
+
+  const geometry = new THREE.PlaneGeometry(4, 3);
+  const material = new THREE.MeshBasicMaterial({ map: texture });
+  const panneau = new THREE.Mesh(geometry, material);
+  scene.add(panneau);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    panneau.rotation.y += 0.01;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+</script>
+
+ 
 </head>
 <body style="margin:0; overflow:hidden; background:#000;">
   <!-- Le canvas 3D va être créé par Three.js -->
   <script src="script.js"></script>
 </body>
 </html>
+
