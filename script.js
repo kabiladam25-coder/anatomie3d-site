@@ -1,57 +1,62 @@
-// --- SCÈNE DE BASE ---
+// --- SCENE 3D DE BASE ---
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
   60,
   window.innerWidth / window.innerHeight,
   0.1,
-  100
+  500
 );
-camera.position.set(0, 0, 5);
+camera.position.set(0, 1, 6);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Lumière (même si ce n'est pas indispensable pour MeshBasicMaterial)
-const light = new THREE.AmbientLight(0xffffff, 1);
-scene.add(light);
+// --- LUMIERES ---
+const ambient = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambient);
 
-// --- CHARGER UNE IMAGE COMME TEXTURE ---
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(
-  "images/mon_image.png", // 🔴 mets ici le chemin de ton image
-  () => {
-    console.log("Image chargée !");
+const dir = new THREE.DirectionalLight(0xffffff, 1);
+dir.position.set(5, 5, 5);
+scene.add(dir);
+
+// --- CHARGEMENT DU MODELE GLB ---
+const loader = new THREE.GLTFLoader();
+loader.load(
+  "models/model.glb", // ⚠️ Remplace par ton fichier
+  (gltf) => {
+    const model = gltf.scene;
+    scene.add(model);
+
+    // Ajustements du modèle
+    model.scale.set(0.01, 0.01, 0.01); // Réduire si trop grand
+    model.position.set(0, -1, 0);
   },
   undefined,
   (err) => {
-    console.error("Erreur de chargement de l'image", err);
+    console.error("Erreur de chargement du modèle:", err);
   }
 );
 
-// Plan qui affichera l'image
-const geometry = new THREE.PlaneGeometry(4, 3); // largeur, hauteur
-const material = new THREE.MeshBasicMaterial({ map: texture });
-const panneau = new THREE.Mesh(geometry, material);
-scene.add(panneau);
+// --- CONTROLES (rotation avec la souris) ---
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
 
-// --- ANIMATION ---
+// --- BOUCLE ANIMATION ---
 function animate() {
   requestAnimationFrame(animate);
 
-  // Juste pour voir que ça bouge un peu
-  panneau.rotation.y += 0.01;
-
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
 
-// --- ADAPTATION À LA TAILLE DE FENÊTRE ---
+// --- RESPONSIVE ---
 window.addEventListener("resize", () => {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
 });
