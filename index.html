@@ -6,20 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anatomie 3D - Accueil</title>
 
-  <!-- STYLES GÉNÉRAUX -->
+  <!-- STYLES -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- THREE.JS -->
-  <script type="module">
-    import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
-    window.THREE = THREE;
-  </script>
-
-  <!-- GLTF Loader -->
-  <script type="module">
-    import { GLTFLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
-    window.GLTFLoader = GLTFLoader;
-  </script>
+  <!-- THREE.JS (CLASSIQUE, PAS MODULES) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/controls/OrbitControls.js"></script>
 
 </head>
 
@@ -31,11 +24,11 @@
     <p>Exploration visuelle du corps humain</p>
   </header>
 
-  <!-- MENU PRINCIPAL -->
+  <!-- NAVIGATION -->
   <nav>
     <ul>
-      <li><a href="anatomie.html">Système Squelettique</a></li>
-      <li><a href="anatomie-coeur.html">Système Cardiaque</a></li>
+      <li><a href="anatomie.html">Système squelettique</a></li>
+      <li><a href="anatomie-coeur.html">Système cardiaque</a></li>
       <li><a href="anatomie.html#organs">Organes</a></li>
       <li><a href="anatomie.html#muscles">Muscles</a></li>
     </ul>
@@ -51,22 +44,9 @@
     <p>© 2025 Anatomie 3D – Tous droits réservés</p>
   </footer>
 
-  <!-- SCRIPT PRINCIPAL (CONTIENT LE CODE 3D) -->
-  <script type="module">
-  import * as THREE from "./three/build/three.module.js";
-  import { OrbitControls } from "./three/examples/jsm/controls/OrbitControls.js";
-  import { GLTFLoader } from "./three/examples/jsm/loaders/GLTFLoader.js";
-
-  window.THREE = THREE;
-  window.OrbitControls = OrbitControls;
-  window.GLTFLoader = GLTFLoader;
-</script>
-
-<script src="script.js" type="module"></script>
-
- 
+  <!-- SCRIPT PRINCIPAL -->
+  <script src="script.js"></script>
 
 </body>
 
 </html>
-
