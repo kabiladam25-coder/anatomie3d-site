@@ -1,60 +1,126 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Anatomie 3D - Image</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Anatomie 3D - Image du cœur</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    body { margin: 0; overflow: hidden; background: #000; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #020617;
+      font-family: system-ui, sans-serif;
+    }
+
+    #loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 1.2rem;
+      opacity: .7;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 14px;
+      left: 16px;
+      color: #22d3ee;
+      background: rgba(15, 23, 42, .6);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: .8rem;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, .1);
+      transition: .2s;
+    }
+
+    .back-btn:hover {
+      opacity: .75;
+    }
   </style>
 </head>
+
 <body>
+
+<a href="index.html" class="back-btn">← retour</a>
+
+<div id="loading">Chargement de l’image...</div>
 
 <script type="module">
   import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+  import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
-  // --- SCÈNE DE BASE ---
+  /* --- SCÈNE --- */
   const scene = new THREE.Scene();
 
+  /* --- CAMERA --- */
   const camera = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
     0.1,
     100
   );
-  camera.position.set(0, 0, 5);
+  camera.position.set(0, 0, 4);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  /* --- RENDERER --- */
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true
+  });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
   document.body.appendChild(renderer.domElement);
 
-  // Lumière (facultative pour MeshBasicMaterial)
-  const light = new THREE.AmbientLight(0xffffff, 1);
-  scene.add(light);
+  /* --- CONTROLS --- */
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enableZoom = true;
+  controls.zoomSpeed = .7;
+  controls.rotateSpeed = .8;
 
-  // --- CHARGER UNE IMAGE COMME TEXTURE ---
-  const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('images/mon_image.png', 
-    () => console.log('Image chargée !'),
+  /* --- LUMIÈRE --- */
+  scene.add(new THREE.AmbientLight(0xffffff, 1));
+
+  /* --- TEXTURE --- */
+  const loader = new THREE.TextureLoader();
+
+  const texture = loader.load(
+    "images/galet/mon_image.png",              // ← ICI LE CHEMIN IMAGE
+    () => { document.getElementById("loading").style.display = "none"; },
     undefined,
-    (err) => console.error('Erreur de chargement de l’image', err)
+    (err) => {
+      document.getElementById("loading").innerText = "Erreur de chargement";
+      console.error("Erreur image:", err);
+    }
   );
 
-  // Plan qui affichera l'image
-  const geometry = new THREE.PlaneGeometry(4, 3); // largeur, hauteur
-  const material = new THREE.MeshBasicMaterial({ map: texture });
-  const panneau = new THREE.Mesh(geometry, material);
-  scene.add(panneau);
+  /* --- MESH --- */
+  const geometry = new THREE.PlaneGeometry(3.5, 2.5);
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true
+  });
 
-  // --- ANIMATION ---
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  /* --- ANIMATION --- */
   function animate() {
     requestAnimationFrame(animate);
-    panneau.rotation.y += 0.01;
+
+    mesh.rotation.y += 0.002; // rotation lente
+    controls.update();
+
     renderer.render(scene, camera);
   }
   animate();
 
-  // --- ADAPTATION À LA TAILLE DE FENÊTRE ---
+  /* --- RESIZE --- */
   window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
