@@ -1,0 +1,6 @@
+loader.load("models/organs.glb", (gltf) => {
+  const organs = gltf.scene;
+  organs.scale.set(0.01, 0.01, 0.01);
+  organs.position.set(0, -1, 0);
+  scene.add(organs);
+});
