@@ -52,8 +52,21 @@
   </footer>
 
   <!-- SCRIPT PRINCIPAL (CONTIENT LE CODE 3D) -->
-  <script type="module" src="script.js"></script>
+  <script type="module">
+  import * as THREE from "./three/build/three.module.js";
+  import { OrbitControls } from "./three/examples/jsm/controls/OrbitControls.js";
+  import { GLTFLoader } from "./three/examples/jsm/loaders/GLTFLoader.js";
+
+  window.THREE = THREE;
+  window.OrbitControls = OrbitControls;
+  window.GLTFLoader = GLTFLoader;
+</script>
+
+<script src="script.js" type="module"></script>
+
+ 
 
 </body>
 
 </html>
+
