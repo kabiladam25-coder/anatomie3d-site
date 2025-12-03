@@ -9,7 +9,9 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 6);
 
+// --- RENDERER ---
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -23,17 +25,21 @@ scene.add(dir);
 
 // --- CHARGEMENT DU MODELE GLB ---
 const loader = new THREE.GLTFLoader();
+
 loader.load(
-  "models/model.glb", // ⚠️ Remplace par ton fichier
+  "models/model.glb",  // ⚠️ Mets ICI le nom correct de ton fichier GLB
   (gltf) => {
     const model = gltf.scene;
-    scene.add(model);
 
-    // Ajustements du modèle
-    model.scale.set(0.01, 0.01, 0.01); // Réduire si trop grand
+    // Échelle / position
+    model.scale.set(0.01, 0.01, 0.01); 
     model.position.set(0, -1, 0);
+
+    scene.add(model);
   },
-  undefined,
+  (progress) => {
+    console.log(`Chargement : ${(progress.loaded / progress.total) * 100}%`);
+  },
   (err) => {
     console.error("Erreur de chargement du modèle:", err);
   }
@@ -42,6 +48,9 @@ loader.load(
 // --- CONTROLES (rotation avec la souris) ---
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enablePan = true;
+controls.enableZoom = true;
 
 // --- BOUCLE ANIMATION ---
 function animate() {
@@ -50,13 +59,15 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
+
 animate();
 
 // --- RESPONSIVE ---
 window.addEventListener("resize", () => {
   const w = window.innerWidth;
   const h = window.innerHeight;
-  renderer.setSize(w, h);
+
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
 });
