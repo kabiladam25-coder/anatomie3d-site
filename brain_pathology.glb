@@ -1,1 +1,6 @@
-heart_pathology.glb
+loader.load("models/brain_pathology.glb", (gltf) => {
+  const brainPatho = gltf.scene;
+  brainPatho.scale.set(0.01, 0.01, 0.01);
+  brainPatho.position.set(0, -1, 0);
+  scene.add(brainPatho);
+});
