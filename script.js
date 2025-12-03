@@ -1,6 +1,7 @@
-// --- SCENE 3D DE BASE ---
+// --- SCENE ---
 const scene = new THREE.Scene();
 
+// --- CAMERA ---
 const camera = new THREE.PerspectiveCamera(
   60,
   window.innerWidth / window.innerHeight,
@@ -13,17 +14,17 @@ camera.position.set(0, 1, 6);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 
-// --- LUMIERES ---
-const ambient = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambient);
+// IMPORTANT : attacher dans le container
+document.getElementById("viewer-container").appendChild(renderer.domElement);
 
+// --- LIGHTS ---
+scene.add(new THREE.AmbientLight(0xffffff, 1));
 const dir = new THREE.DirectionalLight(0xffffff, 1);
 dir.position.set(5, 5, 5);
 scene.add(dir);
 
-// --- CHARGEMENT DES MODELES ---
+// --- LOADER ---
 const loader = new THREE.GLTFLoader();
 
 // --- SQUELETTE ---
@@ -35,12 +36,8 @@ loader.load(
     skeleton.position.set(0, -1, 0);
     scene.add(skeleton);
   },
-  (progress) => {
-    console.log(`Chargement du squelette : ${(progress.loaded / progress.total) * 100}%`);
-  },
-  (err) => {
-    console.error("Erreur de chargement du squelette:", err);
-  }
+  undefined,
+  (err) => console.error("Erreur squelette:", err)
 );
 
 // --- CORPS HUMAIN ---
@@ -52,37 +49,25 @@ loader.load(
     body.position.set(0, -1, 0);
     scene.add(body);
   },
-  (progress) => {
-    console.log(`Chargement du corps : ${(progress.loaded / progress.total) * 100}%`);
-  },
-  (err) => {
-    console.error("Erreur de chargement du corps:", err);
-  }
+  undefined,
+  (err) => console.error("Erreur corps:", err)
 );
 
-// --- CONTROLES (rotation avec la souris) ---
+// --- CONTROLS ---
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.enablePan = true;
-controls.enableZoom = true;
 
-// --- BOUCLE ANIMATION ---
+// --- LOOP ---
 function animate() {
   requestAnimationFrame(animate);
-
   controls.update();
   renderer.render(scene, camera);
 }
-
 animate();
 
-// --- RESPONSIVE ---
+// --- RESIZE ---
 window.addEventListener("resize", () => {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-
-  camera.aspect = w / h;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
 });
