@@ -23,25 +23,40 @@ const dir = new THREE.DirectionalLight(0xffffff, 1);
 dir.position.set(5, 5, 5);
 scene.add(dir);
 
-// --- CHARGEMENT DU MODELE GLB ---
+// --- CHARGEMENT DES MODELES ---
 const loader = new THREE.GLTFLoader();
 
+// --- SQUELETTE ---
 loader.load(
-  "models/model.glb",  // ⚠️ Mets ICI le nom correct de ton fichier GLB
+  "models/skeleton.glb",
   (gltf) => {
-    const model = gltf.scene;
-
-    // Échelle / position
-    model.scale.set(0.01, 0.01, 0.01); 
-    model.position.set(0, -1, 0);
-
-    scene.add(model);
+    const skeleton = gltf.scene;
+    skeleton.scale.set(0.01, 0.01, 0.01);
+    skeleton.position.set(0, -1, 0);
+    scene.add(skeleton);
   },
   (progress) => {
-    console.log(`Chargement : ${(progress.loaded / progress.total) * 100}%`);
+    console.log(`Chargement du squelette : ${(progress.loaded / progress.total) * 100}%`);
   },
   (err) => {
-    console.error("Erreur de chargement du modèle:", err);
+    console.error("Erreur de chargement du squelette:", err);
+  }
+);
+
+// --- CORPS HUMAIN ---
+loader.load(
+  "models/human_body_normal.glb",
+  (gltf) => {
+    const body = gltf.scene;
+    body.scale.set(0.01, 0.01, 0.01);
+    body.position.set(0, -1, 0);
+    scene.add(body);
+  },
+  (progress) => {
+    console.log(`Chargement du corps : ${(progress.loaded / progress.total) * 100}%`);
+  },
+  (err) => {
+    console.error("Erreur de chargement du corps:", err);
   }
 );
 
