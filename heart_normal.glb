@@ -1,6 +1,1 @@
-loader.load("models/heart_normal.glb", (gltf) => {
-  const heartNormal = gltf.scene;
-  heartNormal.scale.set(0.01, 0.01, 0.01);
-  heartNormal.position.set(0, -1, 0);
-  scene.add(heartNormal);
-});
+heart_normal.glb
