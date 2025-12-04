@@ -1,73 +1,57 @@
-// --- SCENE ---
+// --- SCÈNE DE BASE ---
 const scene = new THREE.Scene();
 
-// --- CAMERA ---
 const camera = new THREE.PerspectiveCamera(
   60,
   window.innerWidth / window.innerHeight,
   0.1,
-  500
+  100
 );
-camera.position.set(0, 1, 6);
+camera.position.set(0, 0, 5);
 
-// --- RENDERER ---
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-// IMPORTANT : attacher dans le container
-document.getElementById("viewer-container").appendChild(renderer.domElement);
+// Lumière (même si ce n'est pas indispensable pour MeshBasicMaterial)
+const light = new THREE.AmbientLight(0xffffff, 1);
+scene.add(light);
 
-// --- LIGHTS ---
-scene.add(new THREE.AmbientLight(0xffffff, 1));
-const dir = new THREE.DirectionalLight(0xffffff, 1);
-dir.position.set(5, 5, 5);
-scene.add(dir);
-
-// --- LOADER ---
-const loader = new THREE.GLTFLoader();
-
-// --- SQUELETTE ---
-loader.load(
-  "models/skeleton.glb",
-  (gltf) => {
-    const skeleton = gltf.scene;
-    skeleton.scale.set(0.01, 0.01, 0.01);
-    skeleton.position.set(0, -1, 0);
-    scene.add(skeleton);
+// --- CHARGER UNE IMAGE COMME TEXTURE ---
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load(
+  "images/mon_image.png", // 🔴 mets ici le chemin de ton image
+  () => {
+    console.log("Image chargée !");
   },
   undefined,
-  (err) => console.error("Erreur squelette:", err)
+  (err) => {
+    console.error("Erreur de chargement de l'image", err);
+  }
 );
 
-// --- CORPS HUMAIN ---
-loader.load(
-  "models/human_body_normal.glb",
-  (gltf) => {
-    const body = gltf.scene;
-    body.scale.set(0.01, 0.01, 0.01);
-    body.position.set(0, -1, 0);
-    scene.add(body);
-  },
-  undefined,
-  (err) => console.error("Erreur corps:", err)
-);
+// Plan qui affichera l'image
+const geometry = new THREE.PlaneGeometry(4, 3); // largeur, hauteur
+const material = new THREE.MeshBasicMaterial({ map: texture });
+const panneau = new THREE.Mesh(geometry, material);
+scene.add(panneau);
 
-// --- CONTROLS ---
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-
-// --- LOOP ---
+// --- ANIMATION ---
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
+
+  // Juste pour voir que ça bouge un peu
+  panneau.rotation.y += 0.01;
+
   renderer.render(scene, camera);
 }
 animate();
 
-// --- RESIZE ---
+// --- ADAPTATION À LA TAILLE DE FENÊTRE ---
 window.addEventListener("resize", () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
 });
