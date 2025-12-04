@@ -1,52 +1,769 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8" />
+  <title data-i18n="page.title">Human3D Clinic – Sciences fondamentales en médecine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anatomie 3D - Accueil</title>
+  
+  <!-- model-viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-  <!-- STYLES -->
-  <link rel="stylesheet" href="style.css" />
 
-  <!-- THREE.JS (CLASSIQUE) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    /* Styles CSS complets fournis précédemment */
+    :root {
+      --bg: #050816;
+      --bg-secondary: #0b1020;
+      --accent: #22d3ee;
+      --accent-soft: rgba(34, 211, 238, 0.12);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --card: #0f172a;
+      --border: #1f2937;
+      --radius-xl: 20px;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #0b1120;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+    }
+
+    .logo-text-main {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 0.95rem;
+    }
+
+    .logo-text-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .lang-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      padding: 0.1rem 0.55rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active,
+    .lang-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 1.5rem auto 1rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(15, 23, 42, 0.8);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(to right, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 32rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+      color: #0b1120;
+      font-weight: 600;
+      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.4);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      border-color: var(--border);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: var(--accent-soft);
+    }
+
+    .hero-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.2rem;
+      align-items: center;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .hero-visual {
+      border-radius: 24px;
+      background: radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.15), transparent 55%),
+                  radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.25), transparent 60%),
+                  var(--bg-secondary);
+      padding: 1rem;
+      border: 1px solid rgba(15, 23, 42, 0.9);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+    }
+    
+    /* Styles for the 3D model viewer and tabs */
+    .viewer-wrap { 
+        width:100%; 
+        max-width:900px; 
+        margin:0 auto; 
+    }
+    model-viewer { 
+        width:100%; 
+        height:400px; 
+        background:#f6f6f6; 
+        border-radius:8px; 
+        margin-top: 0.8rem;
+    }
+
+    .tabs { 
+        display: flex; 
+        gap: 10px; 
+        margin-top: 1rem; 
+    }
+
+    .tab { 
+        cursor: pointer; 
+        padding: 5px 10px; 
+        background: var(--card); 
+        border: 1px solid var(--border);
+        border-radius: 5px; 
+        color: var(--muted);
+        transition: all 0.2s ease;
+    }
+
+    .tab.active { 
+        background: var(--accent-soft); 
+        color: var(--text);
+        border-color: var(--accent);
+    }
+
+    .hero-visual-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-visual-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .timeline {
+      font-size: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.3rem 0.8rem;
+    }
+
+    .timeline-item {
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(15, 23, 42, 0.9);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .timeline-label {
+      color: var(--muted);
+    }
+
+    .timeline-value {
+      font-weight: 600;
+      font-size: 0.72rem;
+    }
+
+    .floating-chip {
+      position: absolute;
+      right: 1.1rem;
+      top: 1.1rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .floating-badge {
+      position: absolute;
+      left: 1.1rem;
+      bottom: 1.1rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.7rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .floating-badge span:nth-child(1) {
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    .floating-badge span:nth-child(2) {
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .subjects-section {
+      max-width: 1200px;
+      margin: 0 auto 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .subjects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .subjects-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .subjects-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .subject-card {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.7rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .subject-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+      transform: translateY(-1px);
+      background: radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 55%),
+                  rgba(15, 23, 42, 0.95);
+    }
+
+    .subject-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .subject-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+  </style>
+
+  <script>
+    // Multilingue simple : FR / EN / ES
+    function setLang(lang) {
+      document.documentElement.setAttribute("lang", lang); // Correction: set standard 'lang' attribute
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+      
+      // Update the page title explicitly since textContent overwrites child elements if any
+      document.title = translations[lang]["page.title"];
+    }
+
+    const translations = {
+      
+  fr: {
+    "page.title": "Human3D Clinic – Sciences fondamentales en médecine",
+    "hero.badge": "Sciences fondamentales en médecine",
+    "hero.title": "Tout le cours,",
+    "hero.title.highlight": "sur une seule plateforme",
+    "hero.subtitle": "Anatomie, physiologie, pathologie, bactériologie... avec modèles 3D, schémas et animations sur la même page pour mieux comprendre et mémoriser.",
+    "hero.btn.start": "Commencer par l’anatomie",
+    "hero.btn.all": "Voir toutes les matières",
+    "hero.meta.levels": "Tous les niveaux d’études en médecine",
+    "hero.meta.langs": "Français • Anglais • Espagnol",
+    "subjects.title": "Matières",
+    "subjects.subtitle": "Choisissez une matière pour afficher les organes, pathologies et modèles 3D associés.",
+    "viewer.title": "Cœur – Appareil cardiovasculaire",
+    "viewer.subtitle": "Vue 3D + schémas + résumé clinique",
+    "timeline.vascular": "Vascularisation: Coronaires, aorte",
+    "timeline.drainage": "Drenaje: Veines cavas, pulmonaires",
+    "viewer.patho.label": "Anatomie & Pathologie en 3D",
+    "viewer.level.label": "Niveau: 1re → 6e année",
+    "subject.anatomie": "Anatomie",
+    "subject.physiologie": "Physiologie",
+    "subject.histologie": "Histologie & Biologie cellulaire",
+    "subject.embryologie": "Embryologie",
+    "subject.biochimie": "Biochimie",
+    "subject.biophysique": "Biophysique",
+    "subject.anatomie_pathologique": "Anatomie pathologique",
+    "subject.microbiologie": "Microbiologie & Bactériologie",
+    "subject.immunologie": "Immunologie",
+    "subject.pharmacologie": "Pharmacologie",
+    "subject.semiologie": "Sémiologie",
+    "subject.pathologie_medicale": "Pathologie médicale",
+    "subject.pathologie_chirurgicale": "Pathologie chirurgicale",
+    "subject.radiologie": "Radiologie & Imagerie",
+    "subject.urgences": "Urgences & Réanimation",
+    "subject.sante_publique": "Santé publique & Épidémiologie",
+    "viewer.tab.normal": "Normal",
+    "viewer.tab.pathologie": "Pathologie"
+  },
+
+  en: {
+    "page.title": "Human3D Clinic – Basic Medical Sciences",
+    "hero.badge": "Basic medical sciences",
+    "hero.title": "All your courses,",
+    "hero.title.highlight": "in one single platform",
+    "hero.subtitle": "Anatomy, physiology, pathology, bacteriology… with 3D models, diagrams and animations on the same page to understand and memorize better.",
+    "hero.btn.start": "Start with anatomy",
+    "hero.btn.all": "Browse all subjects",
+    "hero.meta.levels": "All years of medical school",
+    "hero.meta.langs": "French • English • Spanish",
+    "subjects.title": "Subjects",
+    "subjects.subtitle": "Choose a subject to explore organs, diseases and linked 3D models.",
+    "viewer.title": "Heart – Cardiovascular system",
+    "viewer.subtitle": "3D view + diagrams + clinical summary",
+    "timeline.vascular": "Vascularization: Coronaries, aorta",
+    "timeline.drainage": "Drainage: Venae cavae, pulmonary veins",
+    "viewer.patho.label": "Anatomy & Pathology in 3D",
+    "viewer.level.label": "Level: 1st → 6th year",
+    "subject.anatomie": "Anatomy",
+    "subject.physiologie": "Physiology",
+    "subject.histologie": "Histology & Cell Biology",
+    "subject.embryologie": "Embryology",
+    "subject.biochimie": "Biochemistry",
+    "subject.biophysique": "Biophysics",
+    "subject.anatomie_pathologique": "Pathological Anatomy",
+    "subject.microbiologie": "Microbiology & Bacteriology",
+    "subject.immunologie": "Immunology",
+    "subject.pharmacologie": "Pharmacology",
+    "subject.semiologie": "Semiology",
+    "subject.pathologie_medicale": "Medical Pathology",
+    "subject.pathologie_chirurgicale": "Surgical Pathology",
+    "subject.radiologie": "Radiology & Imaging",
+    "subject.urgences": "Emergency & ICU",
+    "subject.sante_publique": "Public Health & Epidemiology",
+    "viewer.tab.normal": "Normal",
+    "viewer.tab.pathologie": "Pathology"
+  },
+
+  es: {
+    "page.title": "Human3D Clinic – Ciencias médicas fundamentales",
+    "hero.badge": "Ciencias médicas fundamentales",
+    "hero.title": "Todos tus cursos,",
+    "hero.title.highlight": "en una sola plataforma",
+    "hero.subtitle": "Anatomía, fisiología, patología, bacteriología… con modelos 3D, esquemas y animaciones en la misma página para comprender y memorizar mejor.",
+    "hero.btn.start": "Empezar con anatomía",
+    "hero.btn.all": "Ver todas las materias",
+    "hero.meta.levels": "Todos los niveles de estudios de medicina",
+    "hero.meta.langs": "Francés • Inglés • Español",
+    "subjects.title": "Materias",
+    "subjects.subtitle": "Elija una materia para ver los órganos, patologías y modelos 3D asociados.",
+    "viewer.title": "Corazón – Aparato cardiovascular",
+    "viewer.subtitle": "Vista 3D + esquemas + resumen clínico",
+    "timeline.vascular": "Vascularización: Coronarias, aorta",
+    "timeline.drainage": "Drenaje: Venas cavas, pulmonares",
+    "viewer.patho.label": "Anatomía & Patología en 3D",
+    "viewer.level.label": "Nivel: 1º → 6º año",
+    "subject.anatomie": "Anatomía",
+    "subject.physiologie": "Fisiología",
+    "subject.histologie": "Histología & Biología celular",
+    "subject.embryologie": "Embriología",
+    "subject.biochimie": "Bioquímica",
+    "subject.biophysique": "Biofísica",
+    "subject.anatomie_pathologique": "Anatomía patológica",
+    "subject.microbiologie": "Microbiología & Bacteriología",
+    "subject.immunologie": "Inmunología",
+    "subject.pharmacologie": "Farmacología",
+    "subject.semiologie": "Semiología",
+    "subject.pathologie_medicale": "Patología médica",
+    "subject.pathologie_chirurgicale": "Patología quirúrgica",
+    "subject.radiologie": "Radiología & Imagen",
+    "subject.urgences": "Urgencias & Reanimación",
+    "subject.sante_publique": "Salud pública & Epidemiología",
+    "viewer.tab.normal": "Normal",
+    "viewer.tab.pathologie": "Patología"
+  }
+};
+
+      
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Initialise en français au chargement
+      setLang("fr");
+
+      // Ajoute un écouteur d'événement à tous les boutons de langue
+      document.querySelectorAll(".lang-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            setLang(this.dataset.lang);
+        });
+      });
+
+      // Gère les clics sur les onglets Normal/Pathologie pour le modèle 3D
+      document.querySelectorAll('.tab').forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Mettre à jour l'image 3D
+            const src = event.target.getAttribute('data-src');
+           
+
+        document.querySelector('#heartViewer').setAttribute('src', src);
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false'); // <-- correct ARIA
+        });
+
+        event.target.classList.add('active');
+        event.target.setAttribute('aria-selected', 'true'); // <-- correct ARIA
+    });
+});
+
+          
+    });
+  </script>
 </head>
 
 <body>
-
-  <!-- HEADER -->
   <header>
-    <h1>Anatomie 3D</h1>
-    <p>Exploration visuelle du corps humain</p>
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-icon">3D</div>
+        <div>
+          <div class="logo-text-main">Human3D Clinic</div>
+          <!-- Ajout de data-i18n ici -->
+          <div class="logo-text-sub" data-i18n="hero.badge"></div>
+        </div>
+      </div>
+      <div class="lang-switch">
+        <span style="color:#6b7280;font-size:0.75rem;">Langues :</span>
+        <!-- Les onclick appellent setLang directement -->
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+      </div>
+    </nav>
   </header>
 
-  <!-- NAVIGATION -->
-  <nav>
-    <ul>
-      <li><a href="anatomie.html">Système squelettique</a></li>
-      <li><a href="anatomie-coeur.html">Système cardiaque</a></li>
-      <li><a href="anatomie.html#organs">Organes</a></li>
-      <li><a href="anatomie.html#muscles">Muscles</a></li>
-    </ul>
-  </nav>
-
-  <!-- VIEWER 3D -->
   <main>
-    <div id="viewer-container"></div>
+    <section class="hero">
+      <!-- Partie gauche : Texte d'introduction -->
+      <div>
+        <div class="hero-badge" data-i18n="hero.badge"></div>
+        <h1 class="hero-title">
+          <span data-i18n="hero.title"></span>
+          <span data-i18n="hero.title.highlight"></span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
+        <div class="hero-actions">
+          <a href="#" class="btn-primary" onclick="return false;" data-i18n="hero.btn.start"></a>
+          <a href="#" class="btn-ghost" onclick="return false;" data-i18n="hero.btn.all"></a>
+        </div>
+        <div class="hero-meta">
+          <span data-i18n="hero.meta.levels"></span>
+          <span>•</span>
+          <span data-i18n="hero.meta.langs"></span>
+        </div>
+      </div>
+
+      <!-- Partie droite : Visualisation 3D -->
+      <div class="hero-visual">
+        <!-- Ajout de data-i18n -->
+        <div class="hero-visual-title" data-i18n="viewer.title"></div>
+        <div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
+
+        <div class="tabs" role="tablist" aria-label="Model tabs">
+  <button class="tab active" role="tab" aria-selected="true"
+          data-src="heart_normal.glb"
+          data-i18n="viewer.tab.normal"></button>
+
+  <button class="tab" role="tab" aria-selected="false"
+          data-src="heart_pathology.glb"
+          data-i18n="viewer.tab.pathologie"></button>
+</div>
+
+  <model-viewer id="heartViewer"
+  src="heart_normal.glb"
+  ios-src="heart_normal.glb"
+  alt="Cœur 3D"
+  auto-rotate
+  camera-controls
+  ar
+  style="width: 100%; height: 350px;">
+</model-viewer>
+      
+
+       
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-label" data-i18n="timeline.vascular"></span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-label" data-i18n="timeline.drainage"></span>
+          </div>
+        </div>
+
+        <div class="floating-badge">
+            <span data-i18n="viewer.patho.label"></span>
+            <span data-i18n="viewer.level.label"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="subjects-section">
+      <div class="subjects-header">
+        <h2 class="subjects-title" data-i18n="subjects.title"></h2>
+        <p class="subjects-subtitle" data-i18n="subjects.subtitle"></p>
+      </div>
+
+      <!-- Le reste de vos cartes de matières irait ici, utilisant data-i18n si vous le souhaitez -->
+      <div class="subjects-grid">
+        <!-- Exemple de carte de sujet (vous devrez ajouter les clés de traduction pour celles-ci) -->
+      
+  <div class="subject-card" onclick="window.location.href='anatomie.html'">
+    <div class="subject-name" data-i18n="subject.anatomie"></div>
+    <div class="subject-meta">Organes, systèmes, régions</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='physiologie.html'">
+    <div class="subject-name" data-i18n="subject.physiologie"></div>
+    <div class="subject-meta">Fonctions des organes, régulations</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='histologie_biologie_cellulaire.html'">
+    <div class="subject-name" data-i18n="subject.histologie"></div>
+    <div class="subject-meta">Tissus, cellules, microscopie</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='embryologie.html'">
+    <div class="subject-name" data-i18n="subject.embryologie"></div>
+    <div class="subject-meta">Développement des organes et systèmes</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='biochimie.html'">
+    <div class="subject-name" data-i18n="subject.biochimie"></div>
+    <div class="subject-meta">Réactions, métabolisme, voies énergétiques</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='biophysique.html'">
+    <div class="subject-name" data-i18n="subject.biophysique"></div>
+    <div class="subject-meta">Mécanismes physiques du vivant</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='anatomie_pathologique.html'">
+    <div class="subject-name" data-i18n="subject.anatomie_pathologique"></div>
+    <div class="subject-meta">Lésions tissulaires, tumeurs, etc.</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='microbiologie_bacteriologie.html'">
+    <div class="subject-name" data-i18n="subject.microbiologie"></div>
+    <div class="subject-meta">Bactéries, virus, champignons, parasites</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='immunologie.html'">
+    <div class="subject-name" data-i18n="subject.immunologie"></div>
+    <div class="subject-meta">Système immunitaire, anticorps, vaccins</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='pharmacologie.html'">
+    <div class="subject-name" data-i18n="subject.pharmacologie"></div>
+    <div class="subject-meta">Médicaments, mécanismes d’action, effets secondaires</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='semiologie.html'">
+    <div class="subject-name" data-i18n="subject.semiologie"></div>
+    <div class="subject-meta">Signes cliniques, symptômes, examen clinique</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='pathologie_medicale.html'">
+    <div class="subject-name" data-i18n="subject.pathologie_medicale"></div>
+    <div class="subject-meta">Maladies par appareil (cardio, respi, neuro…)</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='pathologie_chirurgicale.html'">
+    <div class="subject-name" data-i18n="subject.pathologie_chirurgicale"></div>
+    <div class="subject-meta">Pathologies opératoires, urgences chirurgicales</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='radiologie_imagerie.html'">
+    <div class="subject-name" data-i18n="subject.radiologie"></div>
+    <div class="subject-meta">Scanner, IRM, échographie</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='urgences_reanimation.html'">
+    <div class="subject-name" data-i18n="subject.urgences"></div>
+    <div class="subject-meta">Prise en charge des états critiques</div>
+  </div>
+
+  <div class="subject-card" onclick="window.location.href='sante_publique_epidemiologie.html'">
+    <div class="subject-name" data-i18n="subject.sante_publique"></div>
+    <div class="subject-meta">Prévention, dépistage, statistiques</div>
+  </div>
+</div>
+
+  
+
+    </section>
+ 
+
   </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2025 Anatomie 3D – Tous droits réservés</p>
-  </footer>
-
-  <!-- SCRIPT PRINCIPAL -->
-  <script src="script.js"></script>
-
 </body>
-
 </html>
