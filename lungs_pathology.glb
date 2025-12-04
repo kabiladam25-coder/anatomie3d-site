@@ -1,6 +1,1 @@
-loader.load("models/lungs_pathologie.glb", (gltf) => {
-  const lungsPatho = gltf.scene;
-  lungsPatho.scale.set(0.01, 0.01, 0.01);
-  lungsPatho.position.set(0, -1, 0);
-  scene.add(lungsPatho);
-});
+lungs_pathology.glb
