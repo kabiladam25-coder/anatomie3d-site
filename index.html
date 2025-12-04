@@ -625,6 +625,16 @@
 
       <!-- Partie droite : Visualisation 3D -->
       <div class="hero-visual">
+         <model-viewer 
+        src="modele_coeur.glb" 
+        ios-src="modele_coeur.usdz"
+        poster="poster_coeur.jpg"
+        alt="Modèle 3D du cœur humain"
+        shadow-intensity="1" 
+        camera-controls 
+        auto-rotate 
+        ar>
+    </model-viewer>
         <!-- Ajout de data-i18n -->
         <div class="hero-visual-title" data-i18n="viewer.title"></div>
         <div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
@@ -767,3 +777,4 @@
   </main>
 </body>
 </html>
+
