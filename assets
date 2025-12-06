@@ -6,7 +6,7 @@ assets
 │  │   └─ heart_normal.glb
 │  ├─ heart_pathologie
 │  │   └─ heart_pathologie.glb
-│  ├─ lunghs_pathologie
+│  ├─ lungs_pathologie
 │  ├─ muscles.glb
 │  └─ organs.glb
 ├─ textures
