@@ -629,7 +629,8 @@
         
         <!-- Nous utilisons l'ID heartViewer car c'est lui qui est contrôlé par le script des onglets -->
 <model-viewer id="heartViewer" 
-              src="./assets/models/corazon_normal.glb"
+  <model-viewer src="./assets/models/heart_normal/heart_normal.glb"></model-viewer>
+             
               camera-controls touch-action="pan-y" 
               alt="Cœur 3D" 
               auto-rotate 
@@ -642,8 +643,10 @@
         
 Utilisez le code avec précaution.
   <div class="tabs">
-    <div class="tab active" data-src="./assets/models/corazon_normal.glb">Normal</div>
-    <div class="tab" data-src="./assets/models/corazon_patologico.glb">Pathologie</div>
+
+<div class="tab" data-src="./assets/models/heart_normal.glb">Normal</div>
+<div class="tab" data-src="./assets/models/heart_pathologie.glb">Pathologie</div>
+ 
 </div>
 
      
@@ -790,6 +793,7 @@ Utilisez le code avec précaution.
   </main>
 </body>
 </html>
+
 
 
 
