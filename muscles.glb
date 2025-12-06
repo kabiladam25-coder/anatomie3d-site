@@ -1,6 +1,0 @@
-loader.load("models/muscles.glb", (gltf) => {
-  const muscles = gltf.scene;
-  muscles.scale.set(0.01, 0.01, 0.01);
-  muscles.position.set(0, -1, 0);
-  scene.add(muscles);
-});
