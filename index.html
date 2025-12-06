@@ -628,53 +628,55 @@
       <div class="hero-visual">
         
         <!-- Nous utilisons l'ID heartViewer car c'est lui qui est contrôlé par le script des onglets -->
-<model-viewer id="heartViewer" 
-  <model-viewer src="./assets/models/heart_normal/heart_normal.glb"></model-viewer>
-             
-              camera-controls touch-action="pan-y" 
-              alt="Cœur 3D" 
-              auto-rotate 
+<!-- ==================== Viewer 3D ==================== -->
+<model-viewer id="heartViewer"
+              src="./assets/models/heart_normal/heart_normal.glb"
+              alt="Cœur 3D"
+              auto-rotate
+              camera-controls
+              touch-action="pan-y"
               style="width:100%; height:350px;">
 </model-viewer>
-              
-        <!-- Le reste de vos éléments visuels -->
-        <div class="hero-visual-title" data-i18n="viewer.title"></div>
-        <div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
-        
-Utilisez le code avec précaution.
-  <div class="tabs">
 
-<div class="tab" data-src="./assets/models/heart_normal.glb">Normal</div>
-<div class="tab" data-src="./assets/models/heart_pathologie.glb">Pathologie</div>
- 
+<!-- ==================== Onglets ==================== -->
+<div class="tabs" role="tablist" aria-label="Model tabs">
+
+    <button class="tab active"
+            role="tab"
+            aria-selected="true"
+            data-src="./assets/models/heart_normal/heart_normal.glb"
+            data-i18n="viewer.tab.normal">
+        Normal
+    </button>
+
+    <button class="tab"
+            role="tab"
+            aria-selected="false"
+            data-src="./assets/models/heart_pathologie/heart_pathologie.glb"
+            data-i18n="viewer.tab.pathologie">
+        Pathologie
+    </button>
+
 </div>
 
-     
-        <div class="tabs" role="tablist" aria-label="Model tabs">
-            <button class="tab active" role="tab" aria-selected="true"
-                    data-src="heart_normal.glb"
-                    data-i18n="viewer.tab.normal">Normal</button>
 
-            <button class="tab" role="tab" aria-selected="false"
-                    data-src="models/heart_pathology.glb" <!-- Le chemin d'accès a été corrigé ici -->
-                    data-i18n="viewer.tab.pathologie">Pathologie</button>
-        </div>
-       
-        <div class="timeline">
-            <!-- ... votre code timeline ... -->
-        </div>
+<!-- ==================== Autres éléments visuels ==================== -->
 
-        <div class="floating-chip" data-i18n="hero.chip">Modélisation 3D</div>
+<div class="hero-visual-title" data-i18n="viewer.title"></div>
+<div class="hero-visual-sub" data-i18n="viewer.subtitle"></div>
 
-        <div class="floating-badge">
+<div class="timeline">
+    <!-- éléments timeline -->
+</div>
+
+<div class="floating-chip" data-i18n="hero.chip">Modélisation 3D</div>
+
+<div class="floating-badge">
+    <span data-i18n="viewer.level.label"></span>
+</div>
+
             <!-- ... votre code floating-badge ... -->
-        </div>
-      </div>
-
-      
-
-       
-
+ 
         <div class="timeline">
           <div class="timeline-item">
             <span class="timeline-label" data-i18n="timeline.vascular"></span>
@@ -793,6 +795,7 @@ Utilisez le code avec précaution.
   </main>
 </body>
 </html>
+
 
 
 
