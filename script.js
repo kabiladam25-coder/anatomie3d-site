@@ -26,7 +26,7 @@ scene.add(directionalLight);
 const loader = new THREE.GLTFLoader();
 
 // 🔹 Mets ici le nom du modèle à charger
-const modelPath = "./models/heart_normal.glb";
+const modelPath = ".galets/models/heart_normal.glb";
 
 loader.load(
   modelPath,
