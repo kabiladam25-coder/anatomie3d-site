@@ -2,64 +2,111 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Anatomie 3D - Image</title>
+  <title>Anatomie 3D - Image et GLB</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { margin: 0; overflow: hidden; background: #000; }
-  </style>
+  <style> body { margin:0; overflow:hidden; background:#000; } </style>
 </head>
 <body>
 
 <script type="module">
   import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+  import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+  import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
-  // --- SCÈNE DE BASE ---
   const scene = new THREE.Scene();
-
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
-  );
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
   camera.position.set(0, 0, 5);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  const renderer = new THREE.WebGLRenderer({ antialias:true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   document.body.appendChild(renderer.domElement);
 
-  // Lumière (facultative pour MeshBasicMaterial)
-  const light = new THREE.AmbientLight(0xffffff, 1);
-  scene.add(light);
+  // lumières
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+  dir.position.set(5,10,7.5); scene.add(dir);
 
-  // --- CHARGER UNE IMAGE COMME TEXTURE ---
+  // controls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.update();
+
+  // ---------- IMAGE (texture) ----------
+  // Utiliser l'image que tu as déplacée : images/poster_coeur.jpg
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('images/mon_image.png', 
-    () => console.log('Image chargée !'),
+  textureLoader.load(
+    'images/poster_coeur.jpg',
+    (tex) => {
+      const geometry = new THREE.PlaneGeometry(4, 3);
+      const material = new THREE.MeshBasicMaterial({ map: tex });
+      const panneau = new THREE.Mesh(geometry, material);
+      panneau.position.set(-3, 0, 0);
+      scene.add(panneau);
+      console.log('Texture chargée : images/poster_coeur.jpg');
+    },
     undefined,
-    (err) => console.error('Erreur de chargement de l’image', err)
+    (err) => {
+      console.error('Impossible de charger images/poster_coeur.jpg, vérifie le chemin.', err);
+      // plan de secours visible
+      const g = new THREE.PlaneGeometry(4,3);
+      const m = new THREE.MeshBasicMaterial({ color: 0x333333 });
+      const p = new THREE.Mesh(g,m); p.position.set(-3,0,0); scene.add(p);
+    }
   );
 
-  // Plan qui affichera l'image
-  const geometry = new THREE.PlaneGeometry(4, 3); // largeur, hauteur
-  const material = new THREE.MeshBasicMaterial({ map: texture });
-  const panneau = new THREE.Mesh(geometry, material);
-  scene.add(panneau);
+  // ---------- GLB (modèle) ----------
+  // IMPORTANT : chemin relatif correct, sans slash initial
+  const modelPath = 'models/heart_normal.glb'; // adapte si ton fichier a un autre nom exact
 
-  // --- ANIMATION ---
+  // Test rapide existence par HEAD (utile pour debug 404)
+  async function exists(url) {
+    try {
+      const r = await fetch(url, { method: 'HEAD' });
+      return r.ok;
+    } catch(e) { return false; }
+  }
+
+  (async () => {
+    const ok = await exists(modelPath);
+    console.log('Test HEAD', modelPath, ok);
+    if (!ok) {
+      console.error(`Le fichier ${modelPath} semble introuvable. Vérifie le dossier models/ et le nom exact (sensible à la casse).`);
+      return;
+    }
+    const loader = new GLTFLoader();
+    loader.load(
+      modelPath,
+      (gltf) => {
+        const model = gltf.scene;
+        model.position.set(1.0, -0.4, 0);
+        model.scale.set(1.2,1.2,1.2);
+        scene.add(model);
+        console.log('GLB chargé :', modelPath);
+      },
+      (xhr) => {
+        if (xhr.total) console.log(`Chargement modèle: ${(xhr.loaded/xhr.total*100).toFixed(1)}%`);
+      },
+      (err) => {
+        console.error('Erreur GLTFLoader pour', modelPath, err);
+      }
+    );
+  })();
+
+  // render loop
   function animate() {
     requestAnimationFrame(animate);
-    panneau.rotation.y += 0.01;
     renderer.render(scene, camera);
   }
   animate();
 
-  // --- ADAPTATION À LA TAILLE DE FENÊTRE ---
-  window.addEventListener("resize", () => {
+  // resize
+  window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
   });
+
+  console.log('Ouvre DevTools → Network → recharge pour voir les requêtes de poster_coeur.jpg et heart_normal.glb.');
 </script>
 
 </body>
