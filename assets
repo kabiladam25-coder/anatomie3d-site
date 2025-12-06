@@ -2,11 +2,10 @@ assets
 ├─ icons
 ├─ images
 ├─ models
-│  ├─ heart_normal
-│  │   └─ heart_normal.glb
-│  ├─ heart_pathologie
-│  │   └─ heart_pathologie.glb
-│  ├─ lungs_pathologie
+│  ├─  heart_normal.glb
+│  ├─  heart_pathologie.glb
+|  ├─  lungs_normal.glb
+│  ├─ lungs_pathologie.glb
 │  ├─ muscles.glb
 │  └─ organs.glb
 ├─ textures
