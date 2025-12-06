@@ -1,57 +1,69 @@
-// --- SCÈNE DE BASE ---
+// --- SCENE ---
 const scene = new THREE.Scene();
 
+// --- CAMERA ---
 const camera = new THREE.PerspectiveCamera(
   60,
   window.innerWidth / window.innerHeight,
   0.1,
-  100
+  500
 );
-camera.position.set(0, 0, 5);
+camera.position.set(0, 1, 5);
 
+// --- RENDERER ---
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// Lumière (même si ce n'est pas indispensable pour MeshBasicMaterial)
-const light = new THREE.AmbientLight(0xffffff, 1);
-scene.add(light);
+// --- LIGHTS ---
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+scene.add(hemiLight);
 
-// --- CHARGER UNE IMAGE COMME TEXTURE ---
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(
-  "images/mon_image.png", // 🔴 mets ici le chemin de ton image
-  () => {
-    console.log("Image chargée !");
+const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+dirLight.position.set(5, 10, 7);
+scene.add(dirLight);
+
+// --- LOAD SKELETON GLB ---
+const loader = new THREE.GLTFLoader();
+let skeleton;
+
+loader.load(
+  "models/skeleton.glb",
+  (gltf) => {
+    skeleton = gltf.scene;
+
+    // Scale + position if needed
+    skeleton.scale.set(1.5, 1.5, 1.5);
+    skeleton.position.set(0, -1.5, 0);
+
+    scene.add(skeleton);
+    console.log("Skeleton loaded!");
   },
   undefined,
   (err) => {
-    console.error("Erreur de chargement de l'image", err);
+    console.error("Erreur chargement GLB:", err);
   }
 );
-
-// Plan qui affichera l'image
-const geometry = new THREE.PlaneGeometry(4, 3); // largeur, hauteur
-const material = new THREE.MeshBasicMaterial({ map: texture });
-const panneau = new THREE.Mesh(geometry, material);
-scene.add(panneau);
 
 // --- ANIMATION ---
 function animate() {
   requestAnimationFrame(animate);
 
-  // Juste pour voir que ça bouge un peu
-  panneau.rotation.y += 0.01;
+  // Rotate model if loaded
+  if (skeleton) {
+    skeleton.rotation.y += 0.01;
+  }
 
   renderer.render(scene, camera);
 }
 animate();
 
-// --- ADAPTATION À LA TAILLE DE FENÊTRE ---
+// --- RESIZE ---
 window.addEventListener("resize", () => {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
 });
