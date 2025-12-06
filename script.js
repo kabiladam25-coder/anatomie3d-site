@@ -9,39 +9,49 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 0, 5);
 
+// Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Lumière (même si ce n'est pas indispensable pour MeshBasicMaterial)
-const light = new THREE.AmbientLight(0xffffff, 1);
-scene.add(light);
+// Lumière
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambientLight);
 
-// --- CHARGER UNE IMAGE COMME TEXTURE ---
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(
-  "images/mon_image.png", // 🔴 mets ici le chemin de ton image
-  () => {
-    console.log("Image chargée !");
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+directionalLight.position.set(5, 5, 5);
+scene.add(directionalLight);
+
+// --- CHARGER UN MODELE GLB ---
+const loader = new THREE.GLTFLoader();
+
+// 🔹 Mets ici le nom du modèle à charger
+const modelPath = "./models/heart_normal.glb";
+
+loader.load(
+  modelPath,
+  function (gltf) {
+    const model = gltf.scene;
+    scene.add(model);
+    model.position.set(0, 0, 0);
+    model.scale.set(1, 1, 1);
   },
   undefined,
-  (err) => {
-    console.error("Erreur de chargement de l'image", err);
+  function (error) {
+    console.error("Erreur de chargement du modèle :", error);
   }
 );
-
-// Plan qui affichera l'image
-const geometry = new THREE.PlaneGeometry(4, 3); // largeur, hauteur
-const material = new THREE.MeshBasicMaterial({ map: texture });
-const panneau = new THREE.Mesh(geometry, material);
-scene.add(panneau);
 
 // --- ANIMATION ---
 function animate() {
   requestAnimationFrame(animate);
 
-  // Juste pour voir que ça bouge un peu
-  panneau.rotation.y += 0.01;
+  // Tu peux faire tourner tous les objets de la scène
+  scene.traverse((obj) => {
+    if (obj.isMesh) {
+      obj.rotation.y += 0.01;
+    }
+  });
 
   renderer.render(scene, camera);
 }
@@ -55,17 +65,3 @@ window.addEventListener("resize", () => {
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
