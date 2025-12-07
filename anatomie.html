@@ -589,17 +589,18 @@
 
         <div class="tabs" role="tablist" aria-label="Model tabs">
           <button class="tab active" role="tab" aria-selected="true"
-            data-src="heart_normal.glb"
+            data-src="models/heart_normal.glb"
             data-i18n="viewer.tab.normal"></button>
 
           <button class="tab" role="tab" aria-selected="false"
-            data-src="heart_pathology.glb"
+            data-src="models/heart_pathologie.glb"
             data-i18n="viewer.tab.pathologie"></button>
         </div>
 
+        <!-- Using relative paths (models/...) to avoid 404 on GitHub Pages deployment -->
         <model-viewer id="heartViewer"
-          src="heart_normal.glb"
-          ios-src="heart_normal.glb"
+          src="models/heart_normal.glb"
+          ios-src="models/heart_normal.glb"
           alt="Cœur 3D"
           auto-rotate
           camera-controls

@@ -629,8 +629,9 @@
         
         <!-- Nous utilisons l'ID heartViewer car c'est lui qui est contrôlé par le script des onglets -->
 <!-- ==================== Viewer 3D ==================== -->
+<!-- Using relative path (models/...) to avoid 404 on GitHub Pages deployment -->
 <model-viewer id="heartViewer"
-              src="./assets/models/heart_normal.glb"
+              src="models/heart_normal.glb"
               alt="Cœur 3D"
               auto-rotate
               camera-controls
@@ -644,7 +645,7 @@
     <button class="tab active"
             role="tab"
             aria-selected="true"
-            data-src="./assets/models/heart_normal.glb"
+            data-src="models/heart_normal.glb"
             data-i18n="viewer.tab.normal">
         Normal
     </button>
@@ -652,7 +653,7 @@
     <button class="tab"
             role="tab"
             aria-selected="false"
-            data-src="./assets/models/heart_pathologie.glb"
+            data-src="models/heart_pathologie.glb"
             data-i18n="viewer.tab.pathologie">
         Pathologie
     </button>

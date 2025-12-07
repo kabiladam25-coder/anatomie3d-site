@@ -25,8 +25,9 @@ scene.add(directionalLight);
 // --- CHARGER UN MODELE GLB ---
 const loader = new THREE.GLTFLoader();
 
-// 🔹 Mets ici le nom du modèle à charger
-const modelPath = ".galets/models/heart_normal.glb";
+// 🔹 Using relative path to fix 404 on GitHub Pages
+// Note: Relative paths (without leading slash) work correctly when deployed under a subpath
+const modelPath = "models/heart_normal.glb";
 
 loader.load(
   modelPath,
