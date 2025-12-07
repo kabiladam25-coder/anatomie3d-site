@@ -55,7 +55,10 @@
   );
 
   // ---------- GLB (modèle) ----------
-  // IMPORTANT : chemin relatif correct, sans slash initial
+  // IMPORTANT: Using relative paths (without leading slash) to avoid 404 errors on GitHub Pages
+  // When deployed on GitHub Pages under a subpath (e.g., https://username.github.io/repo-name/),
+  // absolute paths with leading slash would resolve to the domain root instead of the repo root.
+  // Relative paths like 'models/heart_normal.glb' work correctly in all deployment scenarios.
   const modelPath = 'models/heart_normal.glb'; // adapte si ton fichier a un autre nom exact
 
   // Test rapide existence par HEAD (utile pour debug 404)
