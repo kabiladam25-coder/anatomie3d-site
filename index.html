@@ -558,9 +558,11 @@
       });
 
       // Gère les clics sur les onglets Normal/Pathologie pour le modèle 3D
+      // Note: data-src attributes use relative paths (e.g., "models/heart_normal.glb")
+      // to ensure proper loading on GitHub Pages when deployed under a subpath
       document.querySelectorAll('.tab').forEach(button => {
         button.addEventListener('click', (event) => {
-            // Mettre à jour l'image 3D
+            // Mettre à jour l'image 3D avec le chemin relatif depuis data-src
             const src = event.target.getAttribute('data-src');
            
 

@@ -486,6 +486,8 @@
       });
 
       // Tabs Normal / Pathologie
+      // Note: data-src attributes use relative paths (e.g., "models/heart_normal.glb")
+      // to ensure proper loading on GitHub Pages when deployed under a subpath
       document.querySelectorAll(".tab").forEach(button => {
         button.addEventListener("click", (event) => {
           const src = event.target.getAttribute("data-src");
