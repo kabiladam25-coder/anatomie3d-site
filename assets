@@ -1,15 +1,1 @@
-assets
-├─ icons
-├─ images
-├─ models
-│  ├─  heart_normal.glb
-│  ├─  heart_pathologie.glb
-|  ├─  lungs_normal.glb
-│  ├─ lungs_pathologie.glb
-│  ├─ muscles.glb
-│  └─ organs.glb
-├─ textures
-└─ js
-   └─ three
-      ├─ GLTFLoader.js
-      └─ three.min.js
+
