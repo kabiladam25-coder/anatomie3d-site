@@ -336,5 +336,30 @@
        IMPORTANT: s'il contient une autre gestion des onglets ou du model-viewer,
        supprime/merge ces parties pour éviter les doublons. -->
   <script src="./js/script.js"></script>
+<!-- ======== SCRIPT POUR MODEL-VIEWER (Changement de modèle) ======== -->
+<script>
+    // On récupère le viewer
+    const viewer = document.getElementById("heartViewer");
+
+    // On récupère les boutons des onglets
+    const tabs = document.querySelectorAll(".tab");
+
+    // Pour chaque bouton Normal / Pathologie
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+
+            // 1. On change la source du modèle 3D
+            viewer.src = tab.dataset.src;
+
+            // 2. On applique la classe "active" sur le bouton cliqué
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+        });
+    });
+</script>
+
+
+  
 </body>
 </html>
+
