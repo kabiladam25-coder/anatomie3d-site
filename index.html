@@ -8,7 +8,6 @@
   <!-- model-viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-
   <style>
     /* Styles CSS complets fournis précédemment */
     :root {
@@ -629,36 +628,50 @@
         
         <!-- Nous utilisons l'ID heartViewer car c'est lui qui est contrôlé par le script des onglets -->
 <!-- ==================== Viewer 3D ==================== -->
-<model-viewer id="heartViewer"
-              src="./assets/models/heart_normal.glb"
-              alt="Cœur 3D"
-              auto-rotate
-              camera-controls
-              touch-action="pan-y"
-              style="width:100%; height:350px;">
-</model-viewer>
 
-<!-- ==================== Onglets ==================== -->
-<div class="tabs" role="tablist" aria-label="Model tabs">
+    <model-viewer id="heartViewer"
+        src="./models/heart_normal.glb"
+        alt="Cœur 3D"
+        auto-rotate
+        camera-controls
+        touch-action="pan-y"
+        style="width:100%; height:350px;">
+    </model-viewer>
 
-    <button class="tab active"
-            role="tab"
-            aria-selected="true"
-            data-src="./assets/models/heart_normal.glb"
-            data-i18n="viewer.tab.normal">
-        Normal
-    </button>
+    <!-- ======== ONGLETS ======== -->
+    <div class="tabs">
 
-    <button class="tab"
-            role="tab"
-            aria-selected="false"
-            data-src="./assets/models/heart_pathologie.glb"
-            data-i18n="viewer.tab.pathologie">
-        Pathologie
-    </button>
+        <button class="tab active"
+                data-src="./models/heart_normal.glb">
+            Normal
+        </button>
+
+        <button class="tab"
+                data-src="./models/heart_pathologie.glb">
+            Pathologie
+        </button>
+
+    </div>
 
 </div>
 
+<!-- ======== SCRIPT DES ONGLETS ======== -->
+<script>
+    const viewer = document.getElementById("heartViewer");
+    const tabs = document.querySelectorAll(".tab");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+
+            // changer le modèle 3D
+            viewer.src = tab.dataset.src;
+
+            // changer l'onglet actif
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+        });
+    });
+</script>
 
 <!-- ==================== Autres éléments visuels ==================== -->
 
@@ -795,6 +808,7 @@
   </main>
 </body>
 </html>
+
 
 
 
