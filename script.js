@@ -26,7 +26,10 @@ scene.add(directionalLight);
 const loader = new THREE.GLTFLoader();
 
 // 🔹 Mets ici le nom du modèle à charger
-const modelPath = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+const heartModelPath = 'https://raw.githubusercontent.com/kabiladam25-coder/anatomie3d-site/main/models/heart_normal.glb';
+const astronautModelPath = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+
+
 loader.load(
   modelPath,
   function (gltf) {
