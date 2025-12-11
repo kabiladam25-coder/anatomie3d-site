@@ -4,6 +4,56 @@
   <meta charset="UTF-8" />
   <title data-i18n="page.title">Human3D Clinic – Sciences fondamentales en médecine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galerie du cœur</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  #display {
+    width: 100%;
+    height: 300px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+  }
+#thumbnails {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  .thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+    object-fit: cover; /* pour que l'image remplisse le cadre */
+    border: 2px solid transparent;
+  }
+  .thumb:hover {
+    border-color: #ff6666;
+  }
+  img.main-img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+</style>
+
+
+
+
+
+
   
   <!-- model-viewer (Google) -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -238,6 +288,37 @@
 </head>
 
 <body>
+<h1>Galerie du cœur</h1>
+
+<!-- Ici s'affichera l'image cliquée -->
+<div id="display">Cliquez sur une icône pour voir l'image</div>
+
+<!-- Icônes/vignettes en ligne -->
+<div id="thumbnails"></div>
+
+<script>
+const display = document.getElementById('display');
+const thumbnails = document.getElementById('thumbnails');
+
+// On suppose que tes images sont nommées heart1.png à heart50.png dans le dossier "images"
+for (let i = 1; i <= 50; i++) {
+  const div = document.createElement('div');
+  div.className = 'thumb';
+  div.textContent = `Cœur ${i}`;
+  
+  // Quand on clique sur l'icône, on affiche l'image correspondante
+  div.addEventListener('click', () => {
+    const img = document.createElement('img');
+    img.src = `images/heart${i}.png`; // Modifie le chemin si besoin
+    display.innerHTML = ''; // Vider l'affichage précédent
+    display.appendChild(img);
+  });
+  
+  thumbnails.appendChild(div);
+}
+</script>
+
+  
   <header>
     <nav class="nav">
       <div class="logo">
@@ -371,6 +452,7 @@ for (let i = 1; i <= 50; i++) {
   
 </body>
 </html>
+
 
 
 
