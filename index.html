@@ -4,6 +4,56 @@
   <meta charset="UTF-8" />
   <title data-i18n="page.title">Human3D Clinic – Sciences fondamentales en médecine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galerie du cœur</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  #display {
+    width: 100%;
+    height: 300px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+  }
+#thumbnails {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  .thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+    object-fit: cover; /* pour que l'image remplisse le cadre */
+    border: 2px solid transparent;
+  }
+  .thumb:hover {
+    border-color: #ff6666;
+  }
+  img.main-img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+</style>
+
+
+
+
+
+
   
   <!-- model-viewer (Google) -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -238,6 +288,37 @@
 </head>
 
 <body>
+<h1>Galerie du cœur</h1>
+
+<!-- Ici s'affichera l'image cliquée -->
+<div id="display">Cliquez sur une icône pour voir l'image</div>
+
+<!-- Icônes/vignettes en ligne -->
+<div id="thumbnails"></div>
+
+<script>
+const display = document.getElementById('display');
+const thumbnails = document.getElementById('thumbnails');
+
+// On suppose que tes images sont nommées heart1.png à heart50.png dans le dossier "images"
+for (let i = 1; i <= 50; i++) {
+  const div = document.createElement('div');
+  div.className = 'thumb';
+  div.textContent = `Cœur ${i}`;
+  
+  // Quand on clique sur l'icône, on affiche l'image correspondante
+  div.addEventListener('click', () => {
+    const img = document.createElement('img');
+    img.src = `images/heart${i}.png`; // Modifie le chemin si besoin
+    display.innerHTML = ''; // Vider l'affichage précédent
+    display.appendChild(img);
+  });
+  
+  thumbnails.appendChild(div);
+}
+</script>
+
+  
   <header>
     <nav class="nav">
       <div class="logo">
@@ -300,61 +381,18 @@
             <span data-i18n="viewer.patho.label"></span>
             <span data-i18n="viewer.level.label"></span>
         </div>
-<h2>Galerie du cœur</h2>
 
-<div class="galerie">
-    <img src="coeur_normal/image1.png" alt="Image du cœur 1" width="300">
-    <img src="coeur_normal/image2.png" alt="Image du cœur 2" width="300">
-    <img src="coeur_normal/image3.png" alt="Image du cœur 3" width="300">
-    <img src="coeur_normal/image4.png" alt="Image du cœur 4" width="300">
-    <img src="coeur_normal/image5.png" alt="Image du cœur 5" width="300">
-    <img src="coeur_normal/image6.png" alt="Image du cœur 6" width="300">
-    <img src="coeur_normal/image7.png" alt="Image du cœur 7" width="300">
-    <img src="coeur_normal/image8.png" alt="Image du cœur 8" width="300">
-    <img src="coeur_normal/image9.png" alt="Image du cœur 9" width="300">
-    <img src="coeur_normal/image10.png" alt="Image du cœur 10" width="300">
-    <img src="coeur_normal/image11.png" alt="Image du cœur 11" width="300">
-    <img src="coeur_normal/image12.png" alt="Image du cœur 12" width="300">
-    <img src="coeur_normal/image13.png" alt="Image du cœur 13" width="300">
-    <img src="coeur_normal/image14.png" alt="Image du cœur 14" width="300">
-    <img src="coeur_normal/image15.png" alt="Image du cœur 15" width="300">
-    <img src="coeur_normal/image16.png" alt="Image du cœur 16" width="300">
-    <img src="coeur_normal/image17.png" alt="Image du cœur 17" width="300">
-    <img src="coeur_normal/image18.png" alt="Image du cœur 18" width="300">
-    <img src="coeur_normal/image19.png" alt="Image du cœur 19" width="300">
-    <img src="coeur_normal/image20.png" alt="Image du cœur 20" width="300">
-    <img src="coeur_normal/image21.png" alt="Image du cœur 21" width="300">
-    <img src="coeur_normal/image22.png" alt="Image du cœur 22" width="300">
-    <img src="coeur_normal/image23.png" alt="Image du cœur 23" width="300">
-    <img src="coeur_normal/image24.png" alt="Image du cœur 24" width="300">
-    <img src="coeur_normal/image25.png" alt="Image du cœur 25" width="300">
-    <img src="coeur_normal/image26.png" alt="Image du cœur 26" width="300">
-    <img src="coeur_normal/image27.png" alt="Image du cœur 27" width="300">
-    <img src="coeur_normal/image28.png" alt="Image du cœur 28" width="300">
-    <img src="coeur_normal/image29.png" alt="Image du cœur 29" width="300">
-    <img src="coeur_normal/image30.png" alt="Image du cœur 30" width="300">
-    <img src="coeur_normal/image31.png" alt="Image du cœur 31" width="300">
-    <img src="coeur_normal/image32.png" alt="Image du cœur 32" width="300">
-    <img src="coeur_normal/image33.png" alt="Image du cœur 33" width="300">
-    <img src="coeur_normal/image34.png" alt="Image du cœur 34" width="300">
-    <img src="coeur_normal/image35.png" alt="Image du cœur 35" width="300">
-    <img src="coeur_normal/image36.png" alt="Image du cœur 36" width="300">
-    <img src="coeur_normal/image37.png" alt="Image du cœur 37" width="300">
-    <img src="coeur_normal/image38.png" alt="Image du cœur 38" width="300">
-    <img src="coeur_normal/image39.png" alt="Image du cœur 39" width="300">
-    <img src="coeur_normal/image40.png" alt="Image du cœur 40" width="300">
-    <img src="coeur_normal/image41.png" alt="Image du cœur 41" width="300">
-    <img src="coeur_normal/image42.png" alt="Image du cœur 42" width="300">
-    <img src="coeur_normal/image43.png" alt="Image du cœur 43" width="300">
-    <img src="coeur_normal/image44.png" alt="Image du cœur 44" width="300">
-    <img src="coeur_normal/image45.png" alt="Image du cœur 45" width="300">
-    <img src="coeur_normal/image46.png" alt="Image du cœur 46" width="300">
-    <img src="coeur_normal/image47.png" alt="Image du cœur47" width="300">
-    <img src="coeur_normal/image48.png" alt="Image du cœur48" width="300">
-    <img src="coeur_normal/image49.png" alt="Image du cœur49" width="300">
-    <img src="coeur_normal/image50.png" alt="Image du cœur50" width="300">
- 
-</div>
+const container = document.getElementById('coeur-images');
+for (let i = 1; i <= 50; i++) {
+    const img = document.createElement('img');
+    img.src = `https://[ton-utilisateur].github.io/[nom-du-depot]/coeur_normale/figure${i}.png`;
+    img.alt = `figure${i}`;
+    img.style.width = '200px'; // ou la taille que tu veux
+    img.style.margin = '5px';
+    container.appendChild(img);
+}
+</script>
+
         
         <div class="timeline">
           <div class="timeline-item">
@@ -414,5 +452,7 @@
   
 </body>
 </html>
+
+
 
 
