@@ -1,0 +1,19 @@
+anatomie3d-site/
+├── assets/
+│   ├── icons/
+│   ├── images/
+│   │   ├── coeur/
+│   │   ├── lung/
+│   │   └── ...
+│   ├── models/
+│   │   ├── heart/
+│   │   ├── lungs/
+│   │   └── ...
+│   └── js/
+│       ├── three/
+│       └── ...
+├── index.html
+├── anatomie.html
+├── image_viewer.html
+├── style.css
+└── ...
