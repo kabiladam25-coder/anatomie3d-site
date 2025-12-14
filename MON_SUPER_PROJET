@@ -1,0 +1,76 @@
+├─ icons/
+│  ├─ heart_icon.png
+│  ├─ lung_icon.png
+│  ├─ brain_icon.png
+│  ├─ skeleton_icon.png
+│  ├─ settings.svg
+│  ├─ home.svg
+│  ├─ delete.png
+│  ├─ muscle_arm.png
+│  ├─ muscle_leg.png
+│  ├─ muscle_full_body.svg
+│  ├─ fitness_gym.png
+│  └─ ... (autres icônes)
+│
+├─ images/
+│  ├─ coeur/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    ├─ figue2.png
+│  │    │    └─ ... jusqu'à figue50.png
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         ├─ figure2.png
+│  │         └─ ... jusqu'à figue50.png
+│  ├─ lung/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         └─ ...
+│  ├─ brain/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         └─ ...
+│  ├─ skeleton/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         └─ ...
+│
+├─ models/
+│  ├─ heart/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.glb
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ heart_pathologie.glb
+│  │         ├─ figue1.glb
+│  │         └─ ...
+│  ├─ lungs/
+│  │    ├─ lungs_normal.glb
+│  │    └─ lungs_pathologie.glb
+│  ├─ muscles/
+│  │    └─ muscles.glb
+│  ├─ brain/
+│  │    └─ brain_pathology.glb
+│  ├─ skeleton/
+│  │    └─ skeleton.glb
+│  ├─ organs/
+│  │    └─ organs.glb
+│  └─ ... (autres modèles)
+│
+├─ textures/
+│  ├─ heart_normal.jpg
+│  └─ heart_diffuse.jpg
+│
+└─ js/
+   └─ three/
+      ├─ GLTFLoader.js
+      └─ three.min.js
