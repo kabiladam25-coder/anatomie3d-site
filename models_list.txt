@@ -1,8 +1,26 @@
-heart_normal.glb
-heart_pathologie.glb
-lungs_pathologie.glb
-lungs_normal.glb
-muscles.glb
-organs.glb
-brain_pathology.glb
-skeleton.glb
+├─ models/
+│  ├─ heart/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.glb
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ heart_pathologie.glb
+│  │         ├─ figue1.glb
+│  │         └─ ...
+│  ├─ lungs/
+│  │    ├─ lungs_normal.glb
+│  │    └─ lungs_pathologie.glb
+│  ├─ muscles/
+│  │    └─ muscles.glb
+│  ├─ brain/
+│  │    └─ brain_pathology.glb
+│  ├─ skeleton/
+│  │    └─ skeleton.glb
+│  ├─ organs/
+│  │    └─ organs.glb
+│  └─ ... (autres modèles)
+│
+├─ textures/
+│  ├─ heart_normal.jpg
+│  └─ heart_diffuse.jpg
+
