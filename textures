@@ -1,2 +1,3 @@
-heart_diffuse.jpg
-heart_normal.jpg
+├─ textures/
+│  ├─ heart_normal.jpg
+│  └─ heart_diffuse.jpg
