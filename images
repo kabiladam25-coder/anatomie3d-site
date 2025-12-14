@@ -1,5 +1,35 @@
-│  ├─ coeur_normal.png         
-│  ├─ coeur_pathologie.png 
-│  ├─ poster_coeur.jpg
+
+├─ images/
+│  ├─ coeur/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    ├─ figue2.png
+│  │    │    └─ ... jusqu'à figue50.png
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         ├─ figure2.png
+│  │         └─ ... jusqu'à figue50.png
+│  ├─ lung/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         └─ ...
+│  ├─ brain/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         └─ ...
+│  ├─ skeleton/
+│  │    ├─ normal/
+│  │    │    ├─ figue1.png
+│  │    │    └─ ...
+│  │    └─ pathologie/
+│  │         ├─ figue1.png
+│  │         └─ ...
+│
 
 
