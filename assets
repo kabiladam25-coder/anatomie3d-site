@@ -2,7 +2,7 @@ anatomie3d-site/
 ├── assets/
 │   ├── icons/
 │   ├── images/
-│   │   ├── coeur/
+│   │   ├──heart/
 │   │   ├── lung/
 │   │   └── ...
 │   ├── models/
@@ -12,8 +12,4 @@ anatomie3d-site/
 │   └── js/
 │       ├── three/
 │       └── ...
-├── index.html
-├── anatomie.html
-├── image_viewer.html
-├── style.css
-└── ...
+│   │ 
