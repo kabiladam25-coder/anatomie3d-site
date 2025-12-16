@@ -1,35 +1,32 @@
 
 ├─ images/
-│  ├─ coeur/
+│  ├─ heart/
 │  │    ├─ normal/
-│  │    │    ├─ figue1.png
-│  │    │    ├─ figue2.png
-│  │    │    └─ ... jusqu'à figue50.png
-│  │    └─ pathologie/
-│  │         ├─ figue1.png
+│  │    │    ├─ figure1.png
+│  │    │    ├─ figure2.png
+│  │    │    └─ ... up to figure50.png
+│  │    └─ pathology/
+│  │         ├─ figure1.png
 │  │         ├─ figure2.png
-│  │         └─ ... jusqu'à figue50.png
-│  ├─ lung/
+│  │         └─ ... up to figure50.png
+│  ├─ lungs/
 │  │    ├─ normal/
-│  │    │    ├─ figue1.png
+│  │    │    ├─ figure1.png
 │  │    │    └─ ...
-│  │    └─ pathologie/
-│  │         ├─ figue1.png
+│  │    └─ pathology/
+│  │         ├─ figure1.png
 │  │         └─ ...
 │  ├─ brain/
 │  │    ├─ normal/
-│  │    │    ├─ figue1.png
+│  │    │    ├─ figure1.png
 │  │    │    └─ ...
-│  │    └─ pathologie/
-│  │         ├─ figue1.png
+│  │    └─ pathology/
+│  │         ├─ figure1.png
 │  │         └─ ...
 │  ├─ skeleton/
 │  │    ├─ normal/
-│  │    │    ├─ figue1.png
+│  │    │    ├─ figure1.png
 │  │    │    └─ ...
-│  │    └─ pathologie/
-│  │         ├─ figue1.png
+│  │    └─ pathology/
+│  │         ├─ figure1.png
 │  │         └─ ...
-│
-
-
