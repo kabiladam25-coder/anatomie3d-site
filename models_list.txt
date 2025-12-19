@@ -4,12 +4,12 @@
 │  │    │    ├─ figue1.glb
 │  │    │    └─ ...
 │  │    └─ pathologie/
-│  │         ├─ heart_pathologie.glb
+│  │         ├─ heart_pathology.glb
 │  │         ├─ figue1.glb
 │  │         └─ ...
 │  ├─ lungs/
 │  │    ├─ lungs_normal.glb
-│  │    └─ lungs_pathologie.glb
+│  │    └─ lungs_pathology.glb
 │  ├─ muscles/
 │  │    └─ muscles.glb
 │  ├─ brain/
